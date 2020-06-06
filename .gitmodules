@@ -1,0 +1,9 @@
+[submodule "lib/tiny"]
+	path = lib/tiny
+	url = https://github.com/ryanplusplus/tiny
+[submodule "lib/svd"]
+	path = lib/svd
+	url = https://github.com/avrxml/svd
+[submodule "lib/sam0"]
+	path = lib/sam0
+	url = https://github.com/ryanplusplus/sam0
