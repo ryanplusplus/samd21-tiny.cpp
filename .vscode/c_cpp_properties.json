@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "SAMD21G18",
+      "defines": [
+        "__SAMD21G18A__",
+        "DONT_USE_CMSIS_INIT"
+      ],
+      "includePath": [
+        "${workspaceFolder}/lib/sam0/cmsis",
+        "${workspaceFolder}/lib/sam0/cmsis/samd21/include",
+        "${workspaceFolder}/lib/sam0/drivers/system",
+        "${workspaceFolder}/lib/sam0/include",
+        "${workspaceFolder}/lib/tiny/include"
+      ],
+      "intelliSenseMode": "gcc-arm",
+      "cStandard": "c11",
+      "cppStandard": "c++17"
+    }
+  ],
+  "version": 4
+}
