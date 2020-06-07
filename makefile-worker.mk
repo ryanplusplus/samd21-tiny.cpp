@@ -1,3 +1,6 @@
+worker_path := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+docs_mk_path := $(worker_path)docs.mk
+
 SRCS := $(SRC_FILES)
 
 ifneq ($(SRC_DIRS),)
@@ -95,5 +98,7 @@ clean:
 	@$(RM) -rf $(BUILD_DIR)
 
 MKDIR_P ?= mkdir -p
+
+include $(docs_mk_path)
 
 -include $(DEPS) $(LIB_DEPS)

@@ -6,7 +6,6 @@ ARCH := armv6-m
 LINKER_CFG := lib/sam0/linker_scripts/samd21/gcc/samd21g18a_flash.ld
 
 DEFINES := \
-  __ATSAMD21G18A__ \
   __SAMD21G18A__ \
   DONT_USE_CMSIS_INIT \
 
