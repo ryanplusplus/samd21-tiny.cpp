@@ -18,7 +18,7 @@ static void kick_watchdog(tiny_timer_group_t* _timer_group, void* context) {
   (void)context;
   (void)_timer_group;
   watchdog_kick();
-  tiny_timer_start(&timer_group, &timer, 50, kick_watchdog, NULL);
+  tiny_timer_start(&timer_group, &timer, 100, kick_watchdog, NULL);
 }
 
 void main(void) {

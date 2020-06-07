@@ -11,6 +11,7 @@ DEFINES := \
 
 SRC_FILES := \
   lib/sam0/cmsis/samd21/source/gcc/startup_samd21.c \
+  lib/sam0/drivers/wdt/wdt.c \
 
 SRC_DIRS := \
   src \
@@ -19,17 +20,18 @@ LIB_FILES := \
 
 LIB_DIRS := \
   lib/tiny/src \
+  lib/sam0/drivers/port \
   lib/sam0/drivers/system/clock/clock_samd21_r21 \
   lib/sam0/drivers/system/interrupt \
+  lib/sam0/drivers/system/pinmux \
 
 INC_DIRS := \
   lib/sam0/cmsis \
   lib/sam0/cmsis/samd21/include \
   lib/sam0/drivers/system \
   lib/sam0/drivers/system/clock \
-  lib/sam0/drivers/system/interrupt \
   lib/sam0/drivers/system/interrupt/system_interrupt_samd21 \
-  lib/sam0/drivers/system/pinmux \
+  lib/sam0/drivers/wdt \
   lib/sam0/include \
   lib/tiny/include \
 

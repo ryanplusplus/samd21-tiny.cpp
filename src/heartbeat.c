@@ -6,8 +6,10 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "heartbeat.h"
+#include "port.h"
 
 enum {
+  pin = PIN_PA17,
   half_period_in_msec = 500,
 };
 
@@ -17,17 +19,16 @@ static struct {
 
 static void blink(tiny_timer_group_t* group, void* context) {
   (void)context;
-//   LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_4);
+  port_pin_toggle_output_level(pin);
   tiny_timer_start(group, &self.timer, half_period_in_msec, blink, NULL);
 }
 
 void heartbeat_init(tiny_timer_group_t* timer_group) {
-//   LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOA);
-
-//   LL_GPIO_SetPinSpeed(GPIOA, LL_GPIO_PIN_4, LL_GPIO_SPEED_FREQ_LOW);
-//   LL_GPIO_SetPinOutputType(GPIOA, LL_GPIO_PIN_4, LL_GPIO_OUTPUT_PUSHPULL);
-//   LL_GPIO_SetPinMode(GPIOA, LL_GPIO_PIN_4, LL_GPIO_MODE_OUTPUT);
-//   LL_GPIO_SetPinPull(GPIOA, LL_GPIO_PIN_4, LL_GPIO_PULL_UP);
-
+  struct port_config config = {
+    .direction = PORT_PIN_DIR_OUTPUT,
+    .input_pull = PORT_PIN_PULL_NONE,
+    .powersave = false
+  };
+  port_pin_set_config(pin, &config);
   tiny_timer_start(timer_group, &self.timer, half_period_in_msec, blink, NULL);
 }
