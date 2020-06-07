@@ -3,7 +3,7 @@ Sample project using [`tiny`](https://github.com/ryanplusplus/tiny) with SAMD21G
 
 ## Setup
 - Install `gcc-arm-none-eabi`
-- Install [`openocd`](https://sourceforge.net/p/openocd/code/ci/master/tree/) (build `master`from source for STM32G0 support)
+- Install [`openocd`](https://sourceforge.net/p/openocd/code/ci/master/tree/)
 
 ## Use
 ### Compile
@@ -27,28 +27,5 @@ make -f target.mk upload
 ```
 
 ## Resources
-### Reference Manuals
-- [STM32F030 Reference Manual](https://www.st.com/resource/en/reference_manual/dm00091010.pdf)
-- [STM32F100 Reference Manual](https://www.st.com/resource/en/reference_manual/cd00246267.pdf)
-- [STM32F103 Reference Manual](https://www.st.com/resource/en/reference_manual/cd00171190.pdf)
-- [STM32F3 Reference Manual](https://www.st.com/resource/en/reference_manual/dm00043574.pdf)
-- [STM32G0x0 Reference Manual](https://www.st.com/resource/en/reference_manual/dm00463896.pdf)
-- [STM32G0x1 Reference Manual](https://www.st.com/resource/en/reference_manual/dm00371828.pdf)
-
-### Datasheets
-- [STM32F030F4 Datasheet](https://www.st.com/resource/en/datasheet/stm32f030f4.pdf)
-- [STM32F100RB Datasheet](https://www.st.com/resource/en/datasheet/stm32f100rb.pdf)
-- [STM32F103C8 Datasheet](https://www.st.com/resource/en/datasheet/stm32f103c8.pdf)
-- [STM32F303VC Datasheet](https://www.st.com/resource/en/datasheet/stm32f303vc.pdf)
-- [STM32G031K8 Datasheet](https://www.st.com/resource/en/datasheet/stm32g031k8.pdf)
-- [STM32G070RB Datasheet](https://www.st.com/resource/en/datasheet/stm32g070rb.pdf)
-
-### User Manuals
-- [NUCLEO-G031K8 User Manual](https://www.st.com/resource/en/user_manual/dm00622380.pdf)
-- [NUCLEO-G070RB User Manual](https://www.st.com/resource/en/user_manual/dm00452640.pdf)
-- [STM32F3 Discovery User Manual](https://www.st.com/resource/en/user_manual/dm00063382.pdf)
-- [STM32VL Discovery User Manual](https://www.st.com/resource/en/user_manual/cd00267113.pdf)
-
-### References
-- [STM32-base](https://stm32-base.org/)
-- [libopencm3](https://github.com/libopencm3/libopencm3)
+- [SAMD21G18A Datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/SAM_D21_DA1_Family_DataSheet_DS40001882F.pdf)
+- [SAMD Arduino Core](https://github.com/arduino/ArduinoCore-samd)

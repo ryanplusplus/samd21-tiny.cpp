@@ -10,7 +10,10 @@
       "executable": "${workspaceFolder}/build/tiny.elf",
       "request": "launch",
       "type": "cortex-debug",
-      "servertype": "jlink",
+      "servertype": "openocd",
+      "configFiles": [
+        "${workspaceRoot}/openocd/debug.cfg"
+      ],
       "svdFile": "${workspaceFolder}/lib/svd/ATSAMD21G18A.svd",
       "preLaunchTask": "debug-deps"
     }

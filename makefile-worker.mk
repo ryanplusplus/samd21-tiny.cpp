@@ -56,15 +56,13 @@ all: $(BUILD_DIR)/$(TARGET).elf $(BUILD_DIR)/$(TARGET).hex
 .PHONY: debug-deps
 debug-deps: $(BUILD_DIR)/$(TARGET).elf
 
-# fixme use jlink
 .PHONY: upload
 upload: $(BUILD_DIR)/$(TARGET).hex
-	@openocd -f $(OPENOCD_CFG)/upload.cfg
+	@openocd -f $(worker_path)/openocd/upload.cfg
 
-# fixme use jlink
 .PHONY: erase
 erase:
-	@openocd -f $(OPENOCD_CFG)/erase.cfg
+	@openocd -f $(worker_path)/openocd/erase.cfg
 
 $(BUILD_DIR)/$(TARGET).elf: $(OBJS) $(BUILD_DIR)/$(TARGET).lib
 	@echo Linking $(notdir $@)...
