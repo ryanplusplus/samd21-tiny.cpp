@@ -19,11 +19,17 @@ LIB_FILES := \
 
 LIB_DIRS := \
   lib/tiny/src \
+  lib/sam0/drivers/system/clock/clock_samd21_r21 \
+  lib/sam0/drivers/system/interrupt \
 
 INC_DIRS := \
   lib/sam0/cmsis \
   lib/sam0/cmsis/samd21/include \
   lib/sam0/drivers/system \
+  lib/sam0/drivers/system/clock \
+  lib/sam0/drivers/system/interrupt \
+  lib/sam0/drivers/system/interrupt/system_interrupt_samd21 \
+  lib/sam0/drivers/system/pinmux \
   lib/sam0/include \
   lib/tiny/include \
 

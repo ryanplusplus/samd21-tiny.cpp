@@ -25,7 +25,7 @@ void main(void) {
   __disable_irq();
   {
     watchdog_init();
-    clock_init();
+    system_clock_init();
     tiny_timer_group_init(&timer_group, systick_init());
     heartbeat_init(&timer_group);
   }
