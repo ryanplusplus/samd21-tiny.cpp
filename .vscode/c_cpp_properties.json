@@ -4,7 +4,8 @@
       "name": "SAMD21G18",
       "defines": [
         "__SAMD21G18A__",
-        "DONT_USE_CMSIS_INIT"
+        "DONT_USE_CMSIS_INIT",
+        "USART_CALLBACK_MODE=1"
       ],
       "includePath": [
         "${workspaceFolder}/lib/sam0/cmsis",
@@ -13,6 +14,7 @@
         "${workspaceFolder}/lib/sam0/drivers/sercom",
         "${workspaceFolder}/lib/sam0/drivers/sercom/i2c",
         "${workspaceFolder}/lib/sam0/drivers/sercom/spi",
+        "${workspaceFolder}/lib/sam0/drivers/sercom/usart",
         "${workspaceFolder}/lib/sam0/drivers/system",
         "${workspaceFolder}/lib/sam0/drivers/system/clock",
         "${workspaceFolder}/lib/sam0/drivers/system/clock/clock_samd21_r21",
