@@ -7,6 +7,8 @@
 #include "spi_sercom0.h"
 
 static struct spi_module spi;
+static struct spi_slave_inst slave;
+
 static i_tiny_spi_t self;
 
 static void transfer(
@@ -14,7 +16,7 @@ static void transfer(
   const uint8_t* write_buffer,
   uint8_t* read_buffer,
   uint16_t buffer_size) {
-  (void)_self;
+  spi_transceive_buffer_wait(&spi, (uint8_t*)write_buffer, read_buffer, buffer_size);
 }
 
 static const i_tiny_spi_api_t api = { transfer };
@@ -28,11 +30,11 @@ i_tiny_spi_t* spi_sercom0_init(
     .mode = SPI_MODE_MASTER,
     .data_order = msb_first ? SPI_DATA_ORDER_MSB : SPI_DATA_ORDER_LSB,
     .transfer_mode = (cpha << SERCOM_SPI_CTRLA_CPHA_Pos) | (cpol << SERCOM_SPI_CTRLA_CPOL_Pos),
-    .mux_setting = SPI_SIGNAL_MUX_SETTING_D,
+    .mux_setting = SPI_SIGNAL_MUX_SETTING_F,
     .character_size = SPI_CHARACTER_SIZE_8BIT,
     .run_in_standby = false,
     .receiver_enable = true,
-    .select_slave_low_detect_enable = true,
+    .select_slave_low_detect_enable = false,
     .master_slave_select_enable = false,
     .generator_source = GCLK_GENERATOR_0,
 
@@ -45,7 +47,6 @@ i_tiny_spi_t* spi_sercom0_init(
   };
 
   spi_init(&spi, SERCOM0, &config);
-
   spi_enable(&spi);
 
   self.api = &api;
