@@ -7,3 +7,6 @@
 [submodule "lib/sam0"]
 	path = lib/sam0
 	url = https://github.com/ryanplusplus/sam0
+[submodule "lib/tiny-devices"]
+	path = lib/tiny-devices
+	url = https://github.com/ryanplusplus/tiny-devices
