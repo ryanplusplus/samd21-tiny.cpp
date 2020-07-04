@@ -5,6 +5,11 @@ CPU := cortex-m0
 ARCH := armv6-m
 LINKER_CFG := lib/sam0/linker_scripts/samd21/gcc/samd21g18a_flash.ld
 
+# Supported tools are `jlink` and `black_magic`
+DEBUG_TOOL := jlink
+BLACK_MAGIC_PORT ?= /dev/ttyACM0
+BLACK_MAGIC_POWER_TARGET ?= N
+
 DEFINES := \
   __SAMD21G18A__ \
   DONT_USE_CMSIS_INIT \

@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Target",
+      "name": "Target (jlink)",
       "cwd": "${workspaceRoot}",
       "executable": "${workspaceFolder}/build/tiny.elf",
       "request": "launch",
@@ -16,6 +16,30 @@
       ],
       "svdFile": "${workspaceFolder}/lib/svd/ATSAMD21G18A.svd",
       "preLaunchTask": "debug-deps"
+    },
+    {
+      "name": "Target (black_magic)",
+      "cwd": "${workspaceRoot}",
+      "executable": "${workspaceFolder}/build/tiny.elf",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "bmp",
+      "BMPGDBSerialPort": "/dev/ttyACM0",
+      "powerOverBMP": "disable",
+      "svdFile": "${workspaceFolder}/lib/svd/ATSAMD21G18A.svd",
+      "preLaunchTask": "debug-deps",
+    },
+    {
+      "name": "Target (black_magic, powered)",
+      "cwd": "${workspaceRoot}",
+      "executable": "${workspaceFolder}/build/tiny.elf",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "bmp",
+      "BMPGDBSerialPort": "/dev/ttyACM0",
+      "powerOverBMP": "enable",
+      "svdFile": "${workspaceFolder}/lib/svd/ATSAMD21G18A.svd",
+      "preLaunchTask": "debug-deps",
     }
   ]
 }
