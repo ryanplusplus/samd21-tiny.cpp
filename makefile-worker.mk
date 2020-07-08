@@ -4,13 +4,13 @@ docs_mk_path := $(worker_path)docs.mk
 SRCS := $(SRC_FILES)
 
 ifneq ($(SRC_DIRS),)
-SRCS += $(shell find $(SRC_DIRS) -name *.c -or -name *.s -or -name *.S)
+SRCS += $(shell find $(SRC_DIRS) -name *.c -or -name *.cpp -or -name *.s -or -name *.S)
 endif
 
 LIB_SRCS := $(LIB_FILES)
 
 ifneq ($(LIB_DIRS),)
-LIB_SRCS += $(shell find $(LIB_DIRS) -name *.c -or -name *.s -or -name *.S)
+LIB_SRCS += $(shell find $(LIB_DIRS) -name *.c -or -name *.cpp -or -name *.s -or -name *.S)
 endif
 
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
@@ -26,10 +26,9 @@ endif
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 DEFINE_FLAGS := $(addprefix -D,$(DEFINES))
 
-CFLAGS += \
+CPPFLAGS += \
   $(INC_FLAGS) \
   $(DEFINE_FLAGS) \
-  -fno-exceptions \
   -fdata-sections \
   -ffunction-sections \
   -nostdlib \
@@ -39,11 +38,20 @@ CFLAGS += \
   -Wno-implicit-fallthrough \
   -Wno-expansion-to-defined \
 
+CFLAGS += \
+
+CXXFLAGS += \
+  -fno-rtti \
+  -fno-exceptions \
+  -fno-non-call-exceptions \
+  -fno-use-cxa-atexit \
+
 LDFLAGS += \
   $(CFLAGS) \
 
 GDB     := arm-none-eabi-gdb
 CC      := arm-none-eabi-gcc
+CXX     := arm-none-eabi-g++
 AS      := arm-none-eabi-as
 LD      := arm-none-eabi-gcc
 AR      := arm-none-eabi-ar
@@ -127,8 +135,14 @@ $(BUILD_DIR)/%.s.o: %.s
 $(BUILD_DIR)/%.c.o: %.c
 	@echo Compiling $(notdir $@)...
 	@$(MKDIR_P) $(dir $@)
-	@$(CC) --specs=nano.specs -MM -MP -MF "$(@:%.o=%.d)" -MT "$(@)" $(CFLAGS) -E $<
-	@$(CC) --specs=nano.specs -x c -g -g2 -Os $(CFLAGS) -mcpu=$(CPU) -march=$(ARCH) -mthumb -std=c99 -c $< -o $@
+	@$(CC) --specs=nano.specs -MM -MP -MF "$(@:%.o=%.d)" -MT "$(@)" $(CPPFLAGS) $(CFLAGS) -E $<
+	@$(CC) --specs=nano.specs -x c -g -g2 -Os $(CPPFLAGS) $(CFLAGS) -mcpu=$(CPU) -march=$(ARCH) -mthumb -std=c99 -c $< -o $@
+
+$(BUILD_DIR)/%.cpp.o: %.cpp
+	@echo Compiling $(notdir $@)...
+	@$(MKDIR_P) $(dir $@)
+	@$(CXX) --specs=nano.specs -MM -MP -MF "$(@:%.o=%.d)" -MT "$(@)" $(CPPFLAGS) $(CXXFLAGS) -E $<
+	@$(CXX) --specs=nano.specs -x c++ -g -g2 -Os $(CPPFLAGS) $(CXXFLAGS) -mcpu=$(CPU) -march=$(ARCH) -mthumb -std=c++17 -c $< -o $@
 
 .PHONY: clean
 clean:
