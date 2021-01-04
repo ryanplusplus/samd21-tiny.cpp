@@ -1,6 +1,8 @@
 worker_path := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 docs_mk_path := $(worker_path)docs.mk
 
+BUILD_DEPS += $(MAKEFILE_LIST)
+
 SRCS := $(SRC_FILES)
 
 ifneq ($(SRC_DIRS),)
@@ -127,18 +129,18 @@ $(BUILD_DIR)/$(TARGET).lib: $(LIB_OBJS)
 	@$(MKDIR_P) $(dir $@)
 	@$(AR) rcs $@ $^
 
-$(BUILD_DIR)/%.s.o: %.s
+$(BUILD_DIR)/%.s.o: %.s $(BUILD_DEPS)
 	@echo Assembling $(notdir $@)...
 	@$(MKDIR_P) $(dir $@)
 	@$(AS) -g2 -mcpu=$(CPU) -march=$(ARCH) -mthumb $< $(INC_FLAGS) -o $@
 
-$(BUILD_DIR)/%.c.o: %.c
+$(BUILD_DIR)/%.c.o: %.c $(BUILD_DEPS)
 	@echo Compiling $(notdir $@)...
 	@$(MKDIR_P) $(dir $@)
 	@$(CC) --specs=nano.specs -MM -MP -MF "$(@:%.o=%.d)" -MT "$(@)" $(CPPFLAGS) $(CFLAGS) -E $<
 	@$(CC) --specs=nano.specs -x c -g -g2 -Os $(CPPFLAGS) $(CFLAGS) -mcpu=$(CPU) -march=$(ARCH) -mthumb -std=c99 -c $< -o $@
 
-$(BUILD_DIR)/%.cpp.o: %.cpp
+$(BUILD_DIR)/%.cpp.o: %.cpp $(BUILD_DEPS)
 	@echo Compiling $(notdir $@)...
 	@$(MKDIR_P) $(dir $@)
 	@$(CXX) --specs=nano.specs -MM -MP -MF "$(@:%.o=%.d)" -MT "$(@)" $(CPPFLAGS) $(CXXFLAGS) -E $<
