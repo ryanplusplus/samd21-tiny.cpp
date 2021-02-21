@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Target (jlink)",
+      "name": "Target (openocd, jlink)",
       "cwd": "${workspaceRoot}",
       "executable": "${workspaceFolder}/build/target.elf",
       "request": "launch",
