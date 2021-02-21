@@ -18,7 +18,6 @@ asf_SYS_INC_DIRS := \
 asf_INC_DIRS := \
 
 asf_LIB_FILES := \
-  lib/sam0/cmsis/samd21/source/gcc/startup_samd21.c \
   lib/sam0/drivers/sercom/i2c/i2c_samd21_r21_d10_d11/i2c_master.c \
   lib/sam0/drivers/sercom/sercom.c \
   lib/sam0/drivers/sercom/sercom_interrupt.c \
