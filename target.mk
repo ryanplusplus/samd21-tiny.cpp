@@ -3,12 +3,12 @@ BUILD_DIR := ./build
 
 CPU := cortex-m0
 ARCH := armv6-m
-OPENOCD_CFG_DIR := openocd
 LINKER_CFG := lib/sam0/linker_scripts/samd21/gcc/samd21g18a_flash.ld
 
 SVD := lib/svd/ATSAMD21G18A.svd
 
-DEBUG_ADAPTER ?= jlink
+DEBUG_ADAPTER ?= openocd
+OPENOCD_CFG_DIR := openocd
 BLACK_MAGIC_PORT ?= /dev/ttyACM0
 BLACK_MAGIC_POWER_TARGET ?= N
 

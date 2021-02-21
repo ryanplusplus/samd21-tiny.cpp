@@ -4,9 +4,9 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "jlink-debug-deps",
+      "label": "openocd-debug-deps",
       "type": "shell",
-      "command": "make -f target.mk debug-deps DEBUG_ADAPTER=jlink",
+      "command": "make -f target.mk debug-deps DEBUG_ADAPTER=openocd",
       "presentation": {
         "echo": true,
         "reveal": "silent",
