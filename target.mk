@@ -24,6 +24,7 @@ CPPFLAGS += \
   -Wno-expansion-to-defined \
 
 SRC_FILES := \
+  lib/sam0/cmsis/samd21/source/gcc/startup_samd21.c \
 
 SRC_DIRS := \
   src \
