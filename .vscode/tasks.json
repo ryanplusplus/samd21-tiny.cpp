@@ -4,9 +4,22 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "debug-deps",
+      "label": "jlink-debug-deps",
       "type": "shell",
-      "command": "make -f target.mk debug-deps",
+      "command": "make -f target.mk debug-deps DEBUG_ADAPTER=jlink",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared",
+        "showReuseMessage": true,
+        "clear": false
+      }
+    },
+    {
+      "label": "black-magic-debug-deps",
+      "type": "shell",
+      "command": "make -f target.mk debug-deps DEBUG_ADAPTER=black_magic",
       "presentation": {
         "echo": true,
         "reveal": "silent",

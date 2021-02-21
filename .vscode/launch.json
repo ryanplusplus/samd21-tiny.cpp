@@ -15,7 +15,7 @@
         "${workspaceRoot}/openocd/debug.cfg"
       ],
       "svdFile": "${workspaceFolder}/build/target.svd",
-      "preLaunchTask": "debug-deps"
+      "preLaunchTask": "jlink-debug-deps"
     },
     {
       "name": "Target (black_magic)",
@@ -27,7 +27,7 @@
       "BMPGDBSerialPort": "/dev/ttyACM0",
       "powerOverBMP": "disable",
       "svdFile": "${workspaceFolder}/build/target.svd",
-      "preLaunchTask": "debug-deps",
+      "preLaunchTask": "black-magic-debug-deps",
     },
     {
       "name": "Target (black_magic, powered)",
@@ -39,7 +39,7 @@
       "BMPGDBSerialPort": "/dev/ttyACM0",
       "powerOverBMP": "enable",
       "svdFile": "${workspaceFolder}/build/target.svd",
-      "preLaunchTask": "debug-deps",
+      "preLaunchTask": "black-magic-debug-deps",
     }
   ]
 }

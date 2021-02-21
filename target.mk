@@ -8,8 +8,7 @@ LINKER_CFG := lib/sam0/linker_scripts/samd21/gcc/samd21g18a_flash.ld
 
 SVD := lib/svd/ATSAMD21G18A.svd
 
-# Supported tools are `jlink` and `black_magic`
-DEBUG_TOOL := jlink
+DEBUG_ADAPTER ?= jlink
 BLACK_MAGIC_PORT ?= /dev/ttyACM0
 BLACK_MAGIC_POWER_TARGET ?= N
 
@@ -54,7 +53,6 @@ include lib_asf.mk
 include lib_tiny.mk
 
 include tools/tools.mk
-include black-magic.mk
 include docs.mk
 
 .PHONY: watch
