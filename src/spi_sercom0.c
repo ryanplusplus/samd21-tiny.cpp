@@ -7,7 +7,6 @@
 #include "spi_sercom0.h"
 
 static struct spi_module spi;
-static struct spi_slave_inst slave;
 
 static i_tiny_spi_t self;
 
@@ -15,7 +14,9 @@ static void transfer(
   i_tiny_spi_t* _self,
   const uint8_t* write_buffer,
   uint8_t* read_buffer,
-  uint16_t buffer_size) {
+  uint16_t buffer_size)
+{
+  (void)_self;
   spi_transceive_buffer_wait(&spi, (uint8_t*)write_buffer, read_buffer, buffer_size);
 }
 
@@ -25,7 +26,8 @@ i_tiny_spi_t* spi_sercom0_init(
   uint8_t cpol,
   uint8_t cpha,
   bool msb_first,
-  uint32_t baud) {
+  uint32_t baud)
+{
   struct spi_config config = {
     .mode = SPI_MODE_MASTER,
     .data_order = msb_first ? SPI_DATA_ORDER_MSB : SPI_DATA_ORDER_LSB,

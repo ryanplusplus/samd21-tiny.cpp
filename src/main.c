@@ -14,14 +14,16 @@
 static tiny_timer_group_t timer_group;
 static tiny_timer_t timer;
 
-static void kick_watchdog(tiny_timer_group_t* _timer_group, void* context) {
+static void kick_watchdog(tiny_timer_group_t* _timer_group, void* context)
+{
   (void)context;
   (void)_timer_group;
   watchdog_kick();
   tiny_timer_start(&timer_group, &timer, 100, kick_watchdog, NULL);
 }
 
-void main(void) {
+int main(void)
+{
   __disable_irq();
   {
     watchdog_init();

@@ -7,38 +7,38 @@
     {
       "name": "Target (jlink)",
       "cwd": "${workspaceRoot}",
-      "executable": "${workspaceFolder}/build/tiny.elf",
+      "executable": "${workspaceFolder}/build/target.elf",
       "request": "launch",
       "type": "cortex-debug",
       "servertype": "openocd",
       "configFiles": [
         "${workspaceRoot}/openocd/debug.cfg"
       ],
-      "svdFile": "${workspaceFolder}/lib/svd/ATSAMD21G18A.svd",
+      "svdFile": "${workspaceFolder}/build/target.svd",
       "preLaunchTask": "debug-deps"
     },
     {
       "name": "Target (black_magic)",
       "cwd": "${workspaceRoot}",
-      "executable": "${workspaceFolder}/build/tiny.elf",
+      "executable": "${workspaceFolder}/build/target.elf",
       "request": "launch",
       "type": "cortex-debug",
       "servertype": "bmp",
       "BMPGDBSerialPort": "/dev/ttyACM0",
       "powerOverBMP": "disable",
-      "svdFile": "${workspaceFolder}/lib/svd/ATSAMD21G18A.svd",
+      "svdFile": "${workspaceFolder}/build/target.svd",
       "preLaunchTask": "debug-deps",
     },
     {
       "name": "Target (black_magic, powered)",
       "cwd": "${workspaceRoot}",
-      "executable": "${workspaceFolder}/build/tiny.elf",
+      "executable": "${workspaceFolder}/build/target.elf",
       "request": "launch",
       "type": "cortex-debug",
       "servertype": "bmp",
       "BMPGDBSerialPort": "/dev/ttyACM0",
       "powerOverBMP": "enable",
-      "svdFile": "${workspaceFolder}/lib/svd/ATSAMD21G18A.svd",
+      "svdFile": "${workspaceFolder}/build/target.svd",
       "preLaunchTask": "debug-deps",
     }
   ]

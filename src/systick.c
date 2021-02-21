@@ -11,11 +11,13 @@ static struct {
   volatile tiny_time_source_ticks_t ticks;
 } self;
 
-void SysTick_Handler(void) {
+void SysTick_Handler(void)
+{
   self.ticks++;
 }
 
-static tiny_time_source_ticks_t ticks(i_tiny_time_source_t* _self) {
+static tiny_time_source_ticks_t ticks(i_tiny_time_source_t* _self)
+{
   (void)_self;
 
   tiny_time_source_ticks_t ticks1;
@@ -31,7 +33,8 @@ static tiny_time_source_ticks_t ticks(i_tiny_time_source_t* _self) {
 
 static const i_tiny_time_source_api_t api = { ticks };
 
-i_tiny_time_source_t* systick_init(void) {
+i_tiny_time_source_t* systick_init(void)
+{
   // fixme SystemCoreClock doesn't exist
   if(SysTick_Config(48000000UL / 1000)) {
     NVIC_SystemReset();

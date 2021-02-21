@@ -14,32 +14,41 @@ static tiny_event_t send_complete;
 static tiny_event_t receive;
 static uint16_t receivedData;
 
-static void rx_callback(const struct usart_module* const module) {
+static void rx_callback(const struct usart_module* const module)
+{
   (void)module;
   tiny_event_publish(&receive, &(tiny_uart_on_receive_args_t){ .byte = receivedData });
   usart_read_job(&usart, &receivedData);
 }
 
-static void tx_callback(const struct usart_module* const module) {
+static void tx_callback(const struct usart_module* const module)
+{
   (void)module;
   tiny_event_publish(&send_complete, NULL);
 }
 
-static void send(i_tiny_uart_t* self, uint8_t byte) {
+static void send(i_tiny_uart_t* self, uint8_t byte)
+{
+  (void)self;
   usart_write_job(&usart, byte);
 }
 
-static i_tiny_event_t* on_send_complete(i_tiny_uart_t* self) {
+static i_tiny_event_t* on_send_complete(i_tiny_uart_t* self)
+{
+  (void)self;
   return &send_complete.interface;
 }
 
-static i_tiny_event_t* on_receive(i_tiny_uart_t* self) {
+static i_tiny_event_t* on_receive(i_tiny_uart_t* self)
+{
+  (void)self;
   return &receive.interface;
 }
 
 static const i_tiny_uart_api_t api = { send, on_send_complete, on_receive };
 
-i_tiny_uart_t* uart_sercom4_init(uint32_t baud) {
+i_tiny_uart_t* uart_sercom4_init(uint32_t baud)
+{
   struct usart_config config = {
     .data_order = USART_DATAORDER_LSB,
     .transfer_mode = USART_TRANSFER_ASYNCHRONOUSLY,

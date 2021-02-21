@@ -6,7 +6,8 @@
 #include "watchdog.h"
 #include "wdt.h"
 
-void watchdog_init(void) {
+void watchdog_init(void)
+{
   struct wdt_conf config = {
     .always_on = false,
     .enable = true,
@@ -18,6 +19,7 @@ void watchdog_init(void) {
   wdt_set_config(&config);
 }
 
-void watchdog_kick(void) {
+void watchdog_kick(void)
+{
   wdt_reset_count();
 }

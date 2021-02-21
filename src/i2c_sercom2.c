@@ -14,7 +14,8 @@ static bool write(
   uint8_t address,
   bool prepare_for_restart,
   const uint8_t* buffer,
-  uint16_t buffer_size) {
+  uint16_t buffer_size)
+{
   (void)_self;
 
   struct i2c_master_packet packet = {
@@ -39,7 +40,8 @@ static bool read(
   uint8_t address,
   bool prepare_for_restart,
   uint8_t* buffer,
-  uint16_t buffer_size) {
+  uint16_t buffer_size)
+{
   (void)self;
 
   struct i2c_master_packet packet = {
@@ -59,14 +61,16 @@ static bool read(
   }
 }
 
-static void reset(i_tiny_i2c_t* self) {
+static void reset(i_tiny_i2c_t* self)
+{
   (void)self;
   i2c_master_reset(&i2c);
 }
 
 static const i_tiny_i2c_api_t api = { write, read, reset };
 
-i_tiny_i2c_t* i2c_sercom2_init(void) {
+i_tiny_i2c_t* i2c_sercom2_init(void)
+{
   struct i2c_master_config config = {
     .baud_rate = I2C_MASTER_BAUD_RATE_100KHZ,
     .baud_rate_high_speed = I2C_MASTER_BAUD_RATE_3400KHZ,
