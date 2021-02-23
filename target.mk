@@ -14,7 +14,6 @@ BLACK_MAGIC_POWER_TARGET ?= N
 
 DEFINES := \
   __SAMD21G18A__ \
-  DONT_USE_CMSIS_INIT \
   USART_CALLBACK_MODE=1 \
 
 include tools/defaults.mk
@@ -22,32 +21,16 @@ include tools/defaults.mk
 CPPFLAGS += \
   -Wno-expansion-to-defined \
 
+INC_DIRS := \
+
+SYS_INC_DIRS := \
+  src \
+
 SRC_FILES := \
   lib/sam0/cmsis/samd21/source/gcc/startup_samd21.c \
 
 SRC_DIRS := \
   src \
-
-SYS_INC_DIRS := \
-  lib/sam0/cmsis \
-	lib/sam0/cmsis/samd21/include \
-  lib/sam0/drivers/port \
-  lib/sam0/drivers/sercom \
-  lib/sam0/drivers/sercom/i2c \
-  lib/sam0/drivers/sercom/i2c/i2c_samd21_r21_d10_d11 \
-  lib/sam0/drivers/sercom/spi \
-  lib/sam0/drivers/sercom/usart \
-  lib/sam0/drivers/system \
-  lib/sam0/drivers/system/clock \
-	lib/sam0/drivers/system/interrupt \
-  lib/sam0/drivers/system/interrupt/system_interrupt_samd21 \
-  lib/sam0/drivers/system/pinmux \
-  lib/sam0/drivers/wdt \
-  lib/sam0/include \
-  src \
-
-INC_DIRS := \
-  lib/tiny/include \
 
 include lib_asf.mk
 include lib_tiny.mk

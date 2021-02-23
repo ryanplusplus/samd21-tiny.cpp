@@ -4,11 +4,11 @@
       "name": "SAMD21G18",
       "defines": [
         "__SAMD21G18A__",
-        "DONT_USE_CMSIS_INIT",
         "USART_CALLBACK_MODE=1"
       ],
       "includePath": [
         "${workspaceFolder}/lib/sam0/cmsis",
+        "${workspaceFolder}/lib/sam0/cmsis/samd21/source",
         "${workspaceFolder}/lib/sam0/cmsis/samd21/include",
         "${workspaceFolder}/lib/sam0/drivers/port",
         "${workspaceFolder}/lib/sam0/drivers/sercom",
