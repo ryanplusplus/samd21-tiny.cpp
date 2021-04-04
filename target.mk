@@ -7,7 +7,8 @@ LINKER_CFG := lib/sam0/linker_scripts/samd21/gcc/samd21g18a_flash.ld
 
 SVD := lib/svd/ATSAMD21G18A.svd
 
-DEBUG_ADAPTER ?= openocd
+DEBUG_ADAPTER ?= jlink
+JLINK_DEVICE := ATSAMD21G18
 OPENOCD_CFG_DIR := openocd
 BLACK_MAGIC_PORT ?= /dev/ttyACM0
 BLACK_MAGIC_POWER_TARGET ?= N
