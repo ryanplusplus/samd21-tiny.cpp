@@ -10,6 +10,8 @@
 #include "tiny_timer.h"
 #include "watchdog.h"
 #include "heartbeat.h"
+#include "uart_sercom4.h"
+#include "tiny_comm.h"
 
 static tiny_timer_group_t timer_group;
 static tiny_timer_t timer;
@@ -35,7 +37,10 @@ int main(void)
 
   kick_watchdog(&timer_group, NULL);
 
-  while(1) {
+  tiny_
+
+    while(1)
+  {
     tiny_timer_group_run(&timer_group);
   }
 }
