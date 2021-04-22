@@ -37,10 +37,7 @@ int main(void)
 
   kick_watchdog(&timer_group, NULL);
 
-  tiny_
-
-    while(1)
-  {
+  while(1) {
     tiny_timer_group_run(&timer_group);
   }
 }
