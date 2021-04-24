@@ -21,6 +21,8 @@ include tools/defaults.mk
 
 CPPFLAGS += \
   -Wno-expansion-to-defined \
+  -flto \
+  -fwhole-program \
 
 INC_DIRS := \
 
@@ -28,7 +30,6 @@ SYS_INC_DIRS := \
   src \
 
 SRC_FILES := \
-  lib/sam0/cmsis/samd21/source/gcc/startup_samd21.c \
 
 SRC_DIRS := \
   src \
