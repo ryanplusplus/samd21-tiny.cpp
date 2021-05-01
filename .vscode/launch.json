@@ -5,6 +5,17 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Target (jlink)",
+      "cwd": "${workspaceRoot}",
+      "executable": "${workspaceFolder}/build/target.elf",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "jlink",
+      "device": "ATSAMD21G18",
+      "svdFile": "${workspaceFolder}/build/target.svd",
+      "preLaunchTask": "jlink-debug-deps"
+    },
+    {
       "name": "Target (openocd, jlink)",
       "cwd": "${workspaceRoot}",
       "executable": "${workspaceFolder}/build/target.elf",
