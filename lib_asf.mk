@@ -24,6 +24,7 @@ asf_ASFLAGS := $(ASFLAGS)
 asf_CPPFLAGS := $(CPPFLAGS)
 asf_CFLAGS := $(CFLAGS)
 asf_CXXFLAGS := $(CXXFLAGS)
+asf_DEFINES := $(DEFINES)
 
 asf_CPPFLAGS += \
   -Wno-unused-parameter \
@@ -35,14 +36,14 @@ asf_SYS_INC_DIRS := \
 
 asf_INC_DIRS := \
 
-asf_LIB_FILES := \
+asf_SRC_FILES := \
   lib/sam0/drivers/sercom/i2c/i2c_samd21_r21_d10_d11/i2c_master.c \
   lib/sam0/drivers/sercom/sercom.c \
   lib/sam0/drivers/sercom/sercom_interrupt.c \
   lib/sam0/drivers/sercom/spi/spi.c \
   lib/sam0/drivers/wdt/wdt.c \
 
-asf_LIB_DIRS := \
+asf_SRC_DIRS := \
   lib/sam0/drivers/port \
   lib/sam0/drivers/sercom/usart \
   lib/sam0/drivers/system/clock/clock_samd21_r21 \
