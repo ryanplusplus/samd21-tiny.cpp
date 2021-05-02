@@ -6,7 +6,10 @@
 #ifndef watchdog_h
 #define watchdog_h
 
-void watchdog_init(void);
-void watchdog_kick(void);
+#include "wdt.h"
+
+#include "tiny_timer.h"
+
+void watchdog_init(tiny_timer_group_t* timer_group);
 
 #endif

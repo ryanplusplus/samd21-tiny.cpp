@@ -18,6 +18,9 @@ SYS_INC_DIRS += \
   lib/sam0/drivers/wdt \
   lib/sam0/include \
 
+CPPFLAGS += \
+  -Wno-expansion-to-defined \
+
 asf_LIB_ROOT := lib/sam0
 
 asf_ASFLAGS := $(ASFLAGS)

@@ -19,11 +19,6 @@ DEFINES := \
 
 include tools/defaults.mk
 
-CPPFLAGS += \
-  -Wno-expansion-to-defined \
-  -flto \
-  -fwhole-program \
-
 INC_DIRS := \
 
 SYS_INC_DIRS := \
