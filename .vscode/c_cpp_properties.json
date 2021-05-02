@@ -27,7 +27,8 @@
       ],
       "intelliSenseMode": "gcc-arm",
       "cStandard": "c11",
-      "cppStandard": "c++17"
+      "cppStandard": "c++17",
+      "compilerPath": "arm-none-eabi-gcc"
     }
   ],
   "version": 4
