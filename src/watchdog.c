@@ -5,6 +5,9 @@
 
 #include "watchdog.h"
 #include "wdt.h"
+#include "_clock.h"
+
+static_assert(clock_gclk1_frequency == 32768);
 
 #define write_and_sync(...)                        \
   do {                                             \

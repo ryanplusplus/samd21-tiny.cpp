@@ -5,6 +5,7 @@
 
 #include "systick.h"
 #include "samd21.h"
+#include "_clock.h"
 
 static struct {
   i_tiny_time_source_t interface;
@@ -35,8 +36,7 @@ static const i_tiny_time_source_api_t api = { ticks };
 
 i_tiny_time_source_t* systick_init(void)
 {
-  // fixme SystemCoreClock doesn't exist
-  if(SysTick_Config(48000000UL / 1000)) {
+  if(SysTick_Config(clock_gclk_main_frequency / 1000)) {
     NVIC_SystemReset();
   }
 
