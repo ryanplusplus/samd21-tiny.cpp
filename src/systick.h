@@ -10,4 +10,6 @@
 
 i_tiny_time_source_t* systick_init(void);
 
+void systick_skip(tiny_time_source_ticks_t ticks);
+
 #endif

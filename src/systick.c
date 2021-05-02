@@ -11,8 +11,17 @@ static struct {
   volatile tiny_time_source_ticks_t ticks;
 } self;
 
+static tiny_time_source_ticks_t skip_ticks;
+
 void SysTick_Handler(void)
 {
+  if(skip_ticks) {
+    self.ticks += skip_ticks - 1;
+    skip_ticks = 0;
+
+    SysTick_Config(48000000UL / 1000);
+  }
+
   self.ticks++;
 }
 
@@ -45,4 +54,21 @@ i_tiny_time_source_t* systick_init(void)
   self.interface.api = &api;
 
   return &self.interface;
+}
+
+void systick_skip(tiny_time_source_ticks_t ticks)
+{
+  if(skip_ticks) {
+    return;
+  }
+
+  tiny_time_source_ticks_t max_ticks_to_skip = SysTick_LOAD_RELOAD_Msk / (48000000UL / 1000);
+
+  if(ticks > max_ticks_to_skip) {
+    ticks = max_ticks_to_skip;
+  }
+
+  SysTick_Config((48000000UL / 1000) * ticks);
+
+  skip_ticks = ticks;
 }
