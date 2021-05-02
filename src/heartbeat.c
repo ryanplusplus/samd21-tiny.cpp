@@ -10,6 +10,8 @@
 
 enum {
   pin = PIN_PA17,
+  pin_group = pin / 32,
+  pin_mask = 1 << (pin % 32),
   half_period_in_msec = 500,
 };
 
@@ -20,17 +22,12 @@ static struct {
 static void blink(tiny_timer_group_t* group, void* context)
 {
   (void)context;
-  port_pin_toggle_output_level(pin);
+  PORT->Group[pin_group].OUTTGL.reg = pin_mask;
   tiny_timer_start(group, &self.timer, half_period_in_msec, blink, NULL);
 }
 
 void heartbeat_init(tiny_timer_group_t* timer_group)
 {
-  struct port_config config = {
-    .direction = PORT_PIN_DIR_OUTPUT,
-    .input_pull = PORT_PIN_PULL_NONE,
-    .powersave = false
-  };
-  port_pin_set_config(pin, &config);
+  PORT->Group[pin_group].DIRSET.reg = pin_mask;
   tiny_timer_start(timer_group, &self.timer, half_period_in_msec, blink, NULL);
 }
