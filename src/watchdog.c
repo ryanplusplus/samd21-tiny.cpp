@@ -4,16 +4,16 @@
  */
 
 #include "watchdog.h"
-#include "wdt.h"
-#include "_clock.h"
+#include "samd21g18a.h"
+#include "clock.h"
 
-static_assert(clock_gclk1_frequency == 32768);
+static_assert(clock_gclk2_frequency == 32768);
 
-#define write_and_sync(...)                        \
-  do {                                             \
-    __VA_ARGS__                                    \
-    while(WDT->STATUS.reg & WDT_STATUS_SYNCBUSY) { \
-    }                                              \
+#define write_and_sync(...)           \
+  do {                                \
+    __VA_ARGS__                       \
+    while(WDT->STATUS.bit.SYNCBUSY) { \
+    }                                 \
   } while(0)
 
 static tiny_timer_t timer;
@@ -30,12 +30,12 @@ void watchdog_init(tiny_timer_group_t* timer_group)
   // Enable WDT clock
   PM->APBAMASK.reg |= PM_APBAMASK_WDT;
 
-  // Select GCLK1 (ULP32K)
+  // Select GCLK2 (XOSC32K)
   write_and_sync({
     GCLK->CLKCTRL.reg =
-      GCLK_CLKCTRL_ID(WDT_GCLK_ID) |
-      GCLK_CLKCTRL_GEN_GCLK1 |
-      GCLK_CLKCTRL_CLKEN;
+      GCLK_CLKCTRL_CLKEN |
+      GCLK_CLKCTRL_GEN_GCLK2 |
+      GCLK_CLKCTRL_ID(WDT_GCLK_ID);
   });
 
   // Set period to 16384 ticks (~0.5 seconds at 32.758 kHz)

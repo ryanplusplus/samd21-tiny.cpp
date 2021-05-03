@@ -6,7 +6,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include "heartbeat.h"
-#include "port.h"
+#include "samd21g18a.h"
 
 enum {
   pin = PIN_PA17,

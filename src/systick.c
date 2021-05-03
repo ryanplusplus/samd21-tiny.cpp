@@ -4,8 +4,8 @@
  */
 
 #include "systick.h"
-#include "samd21.h"
-#include "_clock.h"
+#include "samd21g18a.h"
+#include "clock.h"
 
 static struct {
   i_tiny_time_source_t interface;

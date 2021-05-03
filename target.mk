@@ -15,21 +15,22 @@ BLACK_MAGIC_POWER_TARGET ?= N
 
 DEFINES := \
   __SAMD21G18A__ \
-  USART_CALLBACK_MODE=1 \
 
 include tools/defaults.mk
 
 INC_DIRS := \
+  lib/sam0/include \
 
 SYS_INC_DIRS := \
-  src \
+  lib/sam0/cmsis \
+  lib/sam0/cmsis/samd21/source \
+  lib/sam0/cmsis/samd21/include \
 
 SRC_FILES := \
 
 SRC_DIRS := \
   src \
 
-include lib_asf.mk
 include lib_tiny.mk
 
 include tools/tools.mk

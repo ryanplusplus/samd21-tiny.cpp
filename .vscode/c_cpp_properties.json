@@ -3,25 +3,12 @@
     {
       "name": "SAMD21G18",
       "defines": [
-        "__SAMD21G18A__",
-        "USART_CALLBACK_MODE=1"
+        "__SAMD21G18A__"
       ],
       "includePath": [
         "${workspaceFolder}/lib/sam0/cmsis",
         "${workspaceFolder}/lib/sam0/cmsis/samd21/source",
         "${workspaceFolder}/lib/sam0/cmsis/samd21/include",
-        "${workspaceFolder}/lib/sam0/drivers/port",
-        "${workspaceFolder}/lib/sam0/drivers/sercom",
-        "${workspaceFolder}/lib/sam0/drivers/sercom/i2c",
-        "${workspaceFolder}/lib/sam0/drivers/sercom/spi",
-        "${workspaceFolder}/lib/sam0/drivers/sercom/usart",
-        "${workspaceFolder}/lib/sam0/drivers/system",
-        "${workspaceFolder}/lib/sam0/drivers/system/clock",
-        "${workspaceFolder}/lib/sam0/drivers/system/clock/clock_samd21_r21",
-        "${workspaceFolder}/lib/sam0/drivers/system/interrupt",
-        "${workspaceFolder}/lib/sam0/drivers/system/pinmux",
-        "${workspaceFolder}/lib/sam0/drivers/system/interrupt/system_interrupt_samd21",
-        "${workspaceFolder}/lib/sam0/drivers/wdt",
         "${workspaceFolder}/lib/sam0/include",
         "${workspaceFolder}/lib/tiny/include"
       ],
