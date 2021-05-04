@@ -7,7 +7,7 @@
 #include "samd21g18a.h"
 #include "clock.h"
 
-static_assert(clock_gclk2_frequency == 32768);
+tiny_static_assert(clock_gclk2_frequency == 32768);
 
 #define write_and_sync(...)           \
   do {                                \
