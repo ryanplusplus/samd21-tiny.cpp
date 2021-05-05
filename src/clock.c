@@ -6,6 +6,37 @@
 #include "clock.h"
 #include "samd21g18a.h"
 
+static inline void configure_bod33_for_48mhz(void)
+{
+  SYSCTRL->BOD33.bit.ENABLE = 0;
+  while(!SYSCTRL->PCLKSR.bit.B33SRDY) {
+  };
+
+  // Configure the brown-out detector for 48 MHz
+  SYSCTRL->BOD33.reg =
+    SYSCTRL_BOD33_LEVEL(48) |
+    SYSCTRL_BOD33_ACTION_NONE |
+    SYSCTRL_BOD33_HYST;
+
+  SYSCTRL->BOD33.bit.ENABLE = 1;
+  while(!SYSCTRL->PCLKSR.bit.BOD33RDY) {
+  }
+
+  // Wait for 3.3ish volts
+  while(SYSCTRL->PCLKSR.bit.BOD33DET) {
+  }
+
+  SYSCTRL->BOD33.bit.ENABLE = 0;
+  while(!SYSCTRL->PCLKSR.bit.B33SRDY) {
+  };
+
+  // Now that we're at 3.3ish volts, we want to reset if
+  // the VCC drops too low
+  SYSCTRL->BOD33.bit.ACTION = SYSCTRL_BOD33_ACTION_RESET_Val;
+
+  SYSCTRL->BOD33.bit.ENABLE = 1;
+}
+
 static inline void configure_flash_wait_states_for_48mhz(void)
 {
   // 1 wait state required for 48 MHz at 3.3V
@@ -101,6 +132,7 @@ static inline void configure_gclk2_with_osc32k_source(void)
 
 void clock_init(void)
 {
+  configure_bod33_for_48mhz();
   configure_flash_wait_states_for_48mhz();
   configure_osc32k();
   configure_gclk1_with_osc32k_source_to_feed_dfll48();
