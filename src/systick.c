@@ -4,7 +4,7 @@
  */
 
 #include "systick.h"
-#include "samd21g18a.h"
+#include "micro.h"
 #include "clock.h"
 
 static struct {

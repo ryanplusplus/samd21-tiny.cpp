@@ -4,7 +4,7 @@
  */
 
 #include "clock.h"
-#include "samd21g18a.h"
+#include "micro.h"
 
 static inline void configure_bod33_for_48mhz(void)
 {

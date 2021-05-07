@@ -4,7 +4,7 @@
  */
 
 #include "watchdog.h"
-#include "samd21g18a.h"
+#include "micro.h"
 #include "clock.h"
 
 tiny_static_assert(clock_gclk2_frequency == 32768);

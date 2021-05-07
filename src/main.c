@@ -3,13 +3,14 @@
  * @brief
  */
 
-#include "samd21g18a.h"
+#include "micro.h"
 #include "clock.h"
 #include "systick.h"
 #include "tiny_timer.h"
 #include "watchdog.h"
 #include "heartbeat.h"
 #include "tiny_comm.h"
+#include "uart_sercom4.h"
 
 static tiny_timer_group_t timer_group;
 
@@ -23,6 +24,9 @@ int main(void)
     heartbeat_init(&timer_group);
   }
   __enable_irq();
+
+  i_tiny_uart_t* uart = uart_sercom4_init(19200);
+  tiny_uart_send(uart, 0xA5);
 
   while(1) {
     tiny_timer_group_run(&timer_group);
