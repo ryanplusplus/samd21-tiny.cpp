@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include "micro.h"
 #include "clock.h"
-#include "uart_sercom4_pb8_pb9.h"
+#include "uart_sercom4_pb08_pb09.h"
 #include "tiny_event.h"
 
 static i_tiny_uart_t self;
@@ -15,10 +15,6 @@ static tiny_event_t receive;
 
 void SERCOM4_Handler(void)
 {
-  if(SERCOM4->USART.INTFLAG.bit.ERROR) {
-    SERCOM4->USART.INTFLAG.bit.ERROR = 1;
-  }
-
   if(SERCOM4->USART.INTFLAG.bit.TXC) {
     SERCOM4->USART.INTFLAG.bit.TXC = 1;
     tiny_event_publish(&send_complete, NULL);
@@ -87,8 +83,7 @@ static inline void initialize_peripheral(uint32_t baud)
 
   SERCOM4->USART.INTENSET.reg =
     SERCOM_USART_INTENSET_TXC |
-    SERCOM_USART_INTENSET_RXC |
-    SERCOM_USART_INTENSET_ERROR;
+    SERCOM_USART_INTENSET_RXC;
 
   NVIC_EnableIRQ(SERCOM4_IRQn);
 
@@ -99,7 +94,7 @@ static inline void initialize_peripheral(uint32_t baud)
 
 static const i_tiny_uart_api_t api = { send, on_send_complete, on_receive };
 
-i_tiny_uart_t* uart_sercom4_pb8_pb9_init(uint32_t baud)
+i_tiny_uart_t* uart_sercom4_pb08_pb09_init(uint32_t baud)
 {
   tiny_event_init(&send_complete);
   tiny_event_init(&receive);

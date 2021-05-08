@@ -15,10 +15,6 @@ static tiny_event_t receive;
 
 void SERCOM0_Handler(void)
 {
-  if(SERCOM0->USART.INTFLAG.bit.ERROR) {
-    SERCOM0->USART.INTFLAG.bit.ERROR = 1;
-  }
-
   if(SERCOM0->USART.INTFLAG.bit.TXC) {
     SERCOM0->USART.INTFLAG.bit.TXC = 1;
     tiny_event_publish(&send_complete, NULL);
@@ -72,7 +68,7 @@ static inline void initialize_peripheral(uint32_t baud)
 
   SERCOM0->USART.CTRLA.reg =
     SERCOM_USART_CTRLA_MODE_USART_INT_CLK | // Internal clock
-    SERCOM_USART_CTRLA_TXPO(2) | // SERCOM0_PAD2 used for TX
+    SERCOM_USART_CTRLA_TXPO(1) | // SERCOM0_PAD2 used for TX
     SERCOM_USART_CTRLA_RXPO(3) | // SERCOM0_PAD3 used for RX
     SERCOM_USART_CTRLA_DORD; // LSB first
 
@@ -87,8 +83,7 @@ static inline void initialize_peripheral(uint32_t baud)
 
   SERCOM0->USART.INTENSET.reg =
     SERCOM_USART_INTENSET_TXC |
-    SERCOM_USART_INTENSET_RXC |
-    SERCOM_USART_INTENSET_ERROR;
+    SERCOM_USART_INTENSET_RXC;
 
   NVIC_EnableIRQ(SERCOM0_IRQn);
 
