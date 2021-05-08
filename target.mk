@@ -31,6 +31,7 @@ SRC_DIRS := \
   src \
 
 include lib_tiny.mk
+include lib_hardware.mk
 
 include tools/tools.mk
 include docs.mk
