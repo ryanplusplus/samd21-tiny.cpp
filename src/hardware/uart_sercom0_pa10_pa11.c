@@ -57,12 +57,9 @@ static inline void initialize_peripheral(uint32_t baud)
   while(GCLK->STATUS.bit.SYNCBUSY) {
   }
 
-  PORT->Group[0].OUTSET.reg = PORT_PA10;
-  PORT->Group[0].DIRSET.reg = PORT_PA10;
   PORT->Group[0].PMUX[10 >> 1].bit.PMUXE = MUX_PA10C_SERCOM0_PAD2;
   PORT->Group[0].PINCFG[10].bit.PMUXEN = 1;
 
-  PORT->Group[0].DIRCLR.reg = PORT_PA11;
   PORT->Group[0].PMUX[11 >> 1].bit.PMUXO = MUX_PA11C_SERCOM0_PAD3;
   PORT->Group[0].PINCFG[11].bit.PMUXEN = 1;
 
