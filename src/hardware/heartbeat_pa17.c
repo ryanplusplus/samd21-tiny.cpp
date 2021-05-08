@@ -5,7 +5,7 @@
 
 #include <stddef.h>
 #include <stdbool.h>
-#include "heartbeat.h"
+#include "heartbeat_pa17.h"
 #include "micro.h"
 
 enum {
@@ -26,7 +26,7 @@ static void blink(tiny_timer_group_t* group, void* context)
   tiny_timer_start(group, &self.timer, half_period_in_msec, blink, NULL);
 }
 
-void heartbeat_init(tiny_timer_group_t* timer_group)
+void heartbeat_pa17_init(tiny_timer_group_t* timer_group)
 {
   PORT->Group[pin_group].DIRSET.reg = pin_mask;
   tiny_timer_start(timer_group, &self.timer, half_period_in_msec, blink, NULL);
