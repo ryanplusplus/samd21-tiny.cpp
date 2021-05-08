@@ -3,13 +3,11 @@
  * @brief
  */
 
-#include <stdint.h>
 #include "micro.h"
 #include "clock.h"
 #include "uart_sercom0_pa10_pa11.h"
 #include "tiny_event.h"
 
-static i_tiny_uart_t self;
 static tiny_event_t send_complete;
 static tiny_event_t receive;
 
@@ -98,7 +96,7 @@ i_tiny_uart_t* uart_sercom0_pa10_pa11_init(uint32_t baud)
 
   initialize_peripheral(baud);
 
+  static i_tiny_uart_t self;
   self.api = &api;
-
   return &self;
 }

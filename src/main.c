@@ -11,7 +11,7 @@
 #include "heartbeat.h"
 #include "tiny_comm.h"
 #include "uart_sercom0_pa10_pa11.h"
-#include "tiny_comm.h"
+#include "spi_sercom4_pa12_pb10_pb11.h"
 
 static tiny_timer_group_t timer_group;
 
@@ -39,6 +39,12 @@ int main(void)
 
   char message[] = "hello, world!";
   tiny_comm_send(&comm.interface, message, sizeof(message));
+
+  i_tiny_spi_t* spi = spi_sercom4_pa12_pb10_pb11_init(0, 0, false, 1000000);
+
+  uint8_t write_buffer[] = "hello, spi!";
+  uint8_t read_buffer[100];
+  tiny_spi_transfer(spi, write_buffer, read_buffer, sizeof(write_buffer));
 
   while(1) {
     tiny_timer_group_run(&timer_group);

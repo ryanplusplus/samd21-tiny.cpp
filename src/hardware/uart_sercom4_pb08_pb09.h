@@ -11,6 +11,4 @@
 
 i_tiny_uart_t* uart_sercom4_pb08_pb09_init(uint32_t baud);
 
-void uart_sercom4_pb08_pb09_run(void);
-
 #endif
