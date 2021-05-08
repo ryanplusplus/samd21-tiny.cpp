@@ -10,7 +10,7 @@
 #include "watchdog.h"
 #include "heartbeat.h"
 #include "tiny_comm.h"
-#include "uart_sercom4.h"
+#include "uart_sercom4_pb8_pb9.h"
 
 static tiny_timer_group_t timer_group;
 
@@ -25,7 +25,7 @@ int main(void)
   }
   __enable_irq();
 
-  i_tiny_uart_t* uart = uart_sercom4_init(19200);
+  i_tiny_uart_t* uart = uart_sercom4_pb8_pb9_init(19200);
   tiny_uart_send(uart, 0xA5);
 
   while(1) {

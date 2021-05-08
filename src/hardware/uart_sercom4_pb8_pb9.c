@@ -6,7 +6,7 @@
 #include <stdint.h>
 #include "micro.h"
 #include "clock.h"
-#include "uart_sercom4.h"
+#include "uart_sercom4_pb8_pb9.h"
 #include "tiny_event.h"
 
 static i_tiny_uart_t self;
@@ -96,7 +96,7 @@ static inline void initialize_peripheral(uint32_t baud)
 
 static const i_tiny_uart_api_t api = { send, on_send_complete, on_receive };
 
-i_tiny_uart_t* uart_sercom4_init(uint32_t baud)
+i_tiny_uart_t* uart_sercom4_pb8_pb9_init(uint32_t baud)
 {
   tiny_event_init(&send_complete);
   tiny_event_init(&receive);

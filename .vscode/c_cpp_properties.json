@@ -10,7 +10,8 @@
         "${workspaceFolder}/lib/sam0/cmsis/samd21/source",
         "${workspaceFolder}/lib/sam0/cmsis/samd21/include",
         "${workspaceFolder}/lib/sam0/include",
-        "${workspaceFolder}/lib/tiny/include"
+        "${workspaceFolder}/lib/tiny/include",
+        "${workspaceFolder}/src/hardware"
       ],
       "intelliSenseMode": "gcc-arm",
       "cStandard": "c11",
