@@ -6,14 +6,18 @@
 #include "sam.h"
 #include "clock.h"
 #include "spi_sercom4_pa12_pb10_pb11.h"
+#include "tiny_utils.h"
 
 static void transfer(
   i_tiny_spi_t* self,
-  const uint8_t* write_buffer,
-  uint8_t* read_buffer,
+  const void* _write_buffer,
+  void* _read_buffer,
   uint16_t buffer_size)
 {
   (void)self;
+
+  reinterpret(write_buffer, _write_buffer, const uint8_t*);
+  reinterpret(read_buffer, _read_buffer, uint8_t*);
 
   for(uint32_t i = 0; i < buffer_size; i++) {
     while(!SERCOM4->SPI.INTFLAG.bit.DRE) {

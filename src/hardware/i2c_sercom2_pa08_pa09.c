@@ -7,6 +7,7 @@
 #include "sam.h"
 #include "clock.h"
 #include "i2c_sercom2_pa08_pa09.h"
+#include "tiny_utils.h"
 
 enum {
   standard_mode_hz = 100000,
@@ -66,10 +67,12 @@ static bool write(
   i_tiny_i2c_t* self,
   uint8_t address,
   bool prepare_for_restart,
-  const uint8_t* buffer,
+  const void* _buffer,
   uint16_t buffer_size)
 {
   (void)self;
+
+  reinterpret(buffer, _buffer, const uint8_t*);
 
   wait_for_operation_to_complete();
 
@@ -114,10 +117,12 @@ static bool read(
   i_tiny_i2c_t* self,
   uint8_t address,
   bool prepare_for_restart,
-  uint8_t* buffer,
+  void* _buffer,
   uint16_t buffer_size)
 {
   (void)self;
+
+  reinterpret(buffer, _buffer, uint8_t*);
 
   if(!buffer_size) {
     goto read_error;
