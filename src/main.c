@@ -3,7 +3,7 @@
  * @brief
  */
 
-#include "board/metro_m0.h"
+#include "board/xiao.h"
 #include "tiny_timer.h"
 #include "tiny_comm.h"
 
