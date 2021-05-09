@@ -3,7 +3,7 @@
  * @brief
  */
 
-#include "micro.h"
+#include "sam.h"
 #include "clock.h"
 #include "uart_sercom4_pb08_pb09.h"
 #include "tiny_event.h"
@@ -14,7 +14,7 @@ static tiny_event_t receive;
 void SERCOM4_Handler(void)
 {
   if(SERCOM4->USART.INTFLAG.bit.TXC) {
-    SERCOM4->USART.INTFLAG.bit.TXC = 1;
+    SERCOM4->USART.INTFLAG.reg |= SERCOM_USART_INTFLAG_TXC;
     tiny_event_publish(&send_complete, NULL);
   }
 
@@ -45,7 +45,7 @@ static i_tiny_event_t* on_receive(i_tiny_uart_t* self)
 static inline void initialize_peripheral(uint32_t baud)
 {
   // Enable SERCOM4 clock
-  PM->APBCMASK.reg |= PM_APBCMASK_SERCOM4;
+  PM->APBCMASK.bit.SERCOM4_ = 1;
 
   // Select GCLK0 (DFLL48)
   GCLK->CLKCTRL.reg =

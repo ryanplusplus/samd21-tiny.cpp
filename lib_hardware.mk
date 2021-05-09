@@ -9,6 +9,7 @@ hardware_ASFLAGS := $(ASFLAGS)
 hardware_CPPFLAGS := $(CPPFLAGS)
 hardware_CFLAGS := $(CFLAGS)
 hardware_CXXFLAGS := $(CXXFLAGS)
+hardware_DEFINES := $(DEFINES)
 
 hardware_INC_DIRS := $(INC_DIRS)
 

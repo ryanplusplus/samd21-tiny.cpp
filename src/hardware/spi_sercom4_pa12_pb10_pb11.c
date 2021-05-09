@@ -3,7 +3,7 @@
  * @brief
  */
 
-#include "micro.h"
+#include "sam.h"
 #include "clock.h"
 #include "spi_sercom4_pa12_pb10_pb11.h"
 
@@ -40,7 +40,7 @@ static void transfer(
 static inline void initialize_peripheral(bool cpol, bool cpha, bool msb_first, uint32_t baud)
 {
   // Enable SERCOM4 clock
-  PM->APBCMASK.reg |= PM_APBCMASK_SERCOM4;
+  PM->APBCMASK.bit.SERCOM4_ = 1;
 
   // Select GCLK0 (DFLL48)
   GCLK->CLKCTRL.reg =

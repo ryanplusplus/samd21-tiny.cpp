@@ -2,7 +2,7 @@ TARGET := target
 BUILD_DIR := ./build
 
 CPU := cortex-m0
-LINKER_CFG := lib/sam0/linker_scripts/samd21/gcc/samd21g18a_flash.ld
+LINKER_CFG := lib/asf4/samd21/gcc/gcc/samd21g18a_flash.ld
 
 SVD := lib/svd/ATSAMD21G18A.svd
 
@@ -18,12 +18,10 @@ DEFINES := \
 include tools/defaults.mk
 
 INC_DIRS := \
-  lib/sam0/include \
+  lib/asf4/samd21/include \
 
 SYS_INC_DIRS := \
-  lib/sam0/cmsis \
-  lib/sam0/cmsis/samd21/source \
-  lib/sam0/cmsis/samd21/include \
+  lib/asf4/samd21/CMSIS/Include \
 
 SRC_FILES := \
 

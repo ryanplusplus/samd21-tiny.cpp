@@ -4,7 +4,7 @@
  */
 
 #include "watchdog.h"
-#include "micro.h"
+#include "sam.h"
 #include "clock.h"
 
 tiny_static_assert(clock_gclk2_frequency == 32768);
@@ -28,7 +28,7 @@ static void kick(tiny_timer_group_t* _timer_group, void* context)
 void watchdog_init(tiny_timer_group_t* timer_group)
 {
   // Enable WDT clock
-  PM->APBAMASK.reg |= PM_APBAMASK_WDT;
+  PM->APBAMASK.bit.WDT_ = 1;
 
   // Select GCLK2 (XOSC32K)
   write_and_sync({
@@ -40,7 +40,7 @@ void watchdog_init(tiny_timer_group_t* timer_group)
 
   // Set period to 16384 ticks (~0.5 seconds at 32.758 kHz)
   write_and_sync({
-    WDT->CONFIG.reg = WDT_CONFIG_PER_11;
+    WDT->CONFIG.reg = WDT_CONFIG_PER_16K;
   });
 
   write_and_sync({

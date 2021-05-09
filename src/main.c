@@ -38,6 +38,10 @@ int main(void)
   uint8_t read_buffer[sizeof(write_buffer)];
   tiny_spi_transfer(spi, write_buffer, read_buffer, sizeof(write_buffer));
 
+  i_tiny_i2c_t* i2c = i2c_init();
+  (void)i2c;
+  tiny_i2c_write(i2c, 0xAB, false, NULL, 0);
+
   while(1) {
     tiny_timer_group_run(&timer_group);
     tiny_comm_run(&comm);

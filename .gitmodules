@@ -4,12 +4,12 @@
 [submodule "lib/svd"]
 	path = lib/svd
 	url = https://github.com/avrxml/svd
-[submodule "lib/sam0"]
-	path = lib/sam0
-	url = https://github.com/ryanplusplus/sam0
 [submodule "lib/tiny-devices"]
 	path = lib/tiny-devices
 	url = https://github.com/ryanplusplus/tiny-devices
 [submodule "tools"]
 	path = tools
 	url = https://github.com/ryanplusplus/arm-none-eabi-gcc-tools
+[submodule "lib/asf4"]
+	path = lib/asf4
+	url = https://github.com/adafruit/asf4

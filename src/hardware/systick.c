@@ -4,7 +4,7 @@
  */
 
 #include "systick.h"
-#include "micro.h"
+#include "sam.h"
 #include "clock.h"
 
 static struct {
