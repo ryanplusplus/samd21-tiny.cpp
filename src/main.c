@@ -39,8 +39,11 @@ int main(void)
   tiny_spi_transfer(spi, write_buffer, read_buffer, sizeof(write_buffer));
 
   i_tiny_i2c_t* i2c = i2c_init();
-  (void)i2c;
-  tiny_i2c_write(i2c, 0xAB, false, NULL, 0);
+  const uint8_t address = 0x53;
+  const uint8_t id_register[] = { 0x06, 0x00 };
+  tiny_i2c_write(i2c, address, true, id_register, sizeof(id_register));
+  uint8_t id[1];
+  tiny_i2c_read(i2c, address, false, id, sizeof(id));
 
   while(1) {
     tiny_timer_group_run(&timer_group);

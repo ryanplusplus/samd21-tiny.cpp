@@ -191,7 +191,6 @@ static inline void initialize_peripheral()
     SERCOM_I2CM_CTRLA_LOWTOUTEN;
 
   SERCOM3->I2CM.CTRLB.reg =
-    SERCOM_I2CM_CTRLB_QCEN |
     SERCOM_I2CM_CTRLB_SMEN;
 
   SERCOM3->I2CM.BAUD.reg = clock_gclk0_frequency / ((2 * standard_mode_hz) - 5);
