@@ -3,8 +3,6 @@ LIBS := hardware $(LIBS)
 INC_DIRS += \
   src/hardware
 
-hardware_LIB_ROOT := src/hardware
-
 hardware_ASFLAGS := $(ASFLAGS)
 hardware_CPPFLAGS := $(CPPFLAGS)
 hardware_CFLAGS := $(CFLAGS)
