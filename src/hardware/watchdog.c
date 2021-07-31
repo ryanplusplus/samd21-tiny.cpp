@@ -47,5 +47,5 @@ void watchdog_init(tiny_timer_group_t* timer_group)
     WDT->CTRL.reg |= WDT_CTRL_ENABLE;
   });
 
-  tiny_timer_start_periodic(timer_group, &timer, 250, kick, NULL);
+  tiny_timer_start_periodic(timer_group, &timer, 250, NULL, kick);
 }
