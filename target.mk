@@ -2,7 +2,7 @@ TARGET := target
 BUILD_DIR := ./build
 
 CPU := cortex-m0
-LINKER_CFG := lib/asf4/samd21/gcc/gcc/samd21g18a_flash.ld
+LINKER_SCRIPT := lib/asf4/samd21/gcc/gcc/samd21g18a_flash.ld
 
 SVD := lib/svd/ATSAMD21G18A.svd
 
