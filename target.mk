@@ -17,16 +17,15 @@ DEFINES := \
 include tools/defaults.mk
 
 INC_DIRS := \
-  lib/asf4/samd21/include \
 
 SYS_INC_DIRS := \
-  lib/asf4/samd21/CMSIS/Include \
 
 SRC_FILES := \
 
 SRC_DIRS := \
   src \
 
+include lib_asf.mk
 include lib_tiny.mk
 include lib_hardware.mk
 
