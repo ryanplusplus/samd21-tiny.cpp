@@ -11,14 +11,14 @@ static tiny_timer_group_t timer_group;
 
 int main(void)
 {
-  __disable_irq();
+  interrupts_disable();
   {
     clock_init();
     tiny_timer_group_init(&timer_group, systick_init());
     watchdog_init(&timer_group);
     heartbeat_init(&timer_group);
   }
-  __enable_irq();
+  interrupts_enable();
 
   tiny_comm_t comm;
   uint8_t send_buffer[100];
@@ -46,8 +46,10 @@ int main(void)
   tiny_i2c_read(i2c, address, false, id, sizeof(id));
 
   while(1) {
-    tiny_timer_group_run(&timer_group);
     tiny_comm_run(&comm);
-    __WFI();
+
+    if(!tiny_timer_group_run(&timer_group)) {
+      interrupts_wfi();
+    }
   }
 }

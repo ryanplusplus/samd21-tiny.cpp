@@ -7,6 +7,7 @@
 #define metro_m0_h
 
 #include "sam.h"
+#include "interrupts.h"
 #include "clock.h"
 #include "watchdog.h"
 #include "systick.h"
