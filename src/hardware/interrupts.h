@@ -18,7 +18,7 @@ static inline void interrupts_disable(void)
   __disable_irq();
 }
 
-static inline void interrupts_wfi(void)
+static inline void interrupts_wait_for_interrupt(void)
 {
   __WFI();
 }

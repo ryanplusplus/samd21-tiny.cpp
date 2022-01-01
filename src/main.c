@@ -49,7 +49,7 @@ int main(void)
     tiny_comm_run(&comm);
 
     if(!tiny_timer_group_run(&timer_group)) {
-      interrupts_wfi();
+      interrupts_wait_for_interrupt();
     }
   }
 }
