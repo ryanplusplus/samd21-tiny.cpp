@@ -15,8 +15,9 @@ enum {
 
 tiny_static_assert(dma_channel_count <= maximum_channel_count);
 
-static DmacDescriptor descriptor[dma_channel_count];
-static DmacDescriptor write_back_descriptor[dma_channel_count];
+// fixme these should be static
+DmacDescriptor descriptor[dma_channel_count];
+DmacDescriptor write_back_descriptor[dma_channel_count];
 static bool used[dma_channel_count];
 
 void dma_init(void)
@@ -43,12 +44,12 @@ void dma_claim_channel(uint8_t channel)
   used[channel] = true;
 }
 
-DmacDescriptor* dma_descriptor(uint8_t channel)
+DmacDescriptor* dma_channel_descriptor(uint8_t channel)
 {
   return &descriptor[channel];
 }
 
-DmacDescriptor* dma_write_back_descriptor(uint8_t channel)
+DmacDescriptor* dma_channel_write_back_descriptor(uint8_t channel)
 {
   return &write_back_descriptor[channel];
 }
@@ -73,6 +74,18 @@ void dma_disable_channel(uint8_t channel)
 {
   DMAC->CHID.bit.ID = channel;
   DMAC->CHCTRLA.bit.ENABLE = 0;
+}
+
+void dma_trigger_channel(uint8_t channel)
+{
+  DMAC->SWTRIGCTRL.vec.SWTRIG |= (1 << channel);
+}
+
+void DMAC_Handler(void)
+{
+  volatile int x;
+  x = 4;
+  (void)x;
 }
 
 // CHINTENCLR.TCMPL -> transfer complete interrupt
