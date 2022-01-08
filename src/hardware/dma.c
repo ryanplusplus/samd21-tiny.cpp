@@ -19,6 +19,7 @@ static DmacDescriptor descriptor[dma_channel_count] __attribute__((__aligned__(1
 static DmacDescriptor write_back_descriptor[dma_channel_count] __attribute__((__aligned__(16)));
 
 static uint8_t next_channel;
+static uint16_t enabled_channels;
 
 void dma_init(void)
 {
@@ -55,23 +56,19 @@ DmacDescriptor* dma_channel_write_back_descriptor(uint8_t channel)
   return &write_back_descriptor[channel];
 }
 
-// fixme use typedefs for priority, trigger action, and trigger source?
 void dma_enable_channel(
   uint8_t channel,
   uint8_t trigger_action,
   uint8_t trigger_source,
   uint8_t priority)
 {
-  // fixme is this necessary?
-  DMAC->CTRL.bit.DMAENABLE = 0;
-  while(DMAC->CTRL.bit.DMAENABLE) {
-  }
-
   DMAC->CHID.bit.ID = channel;
   DMAC->CHCTRLB.bit.TRIGACT = trigger_action;
   DMAC->CHCTRLB.bit.TRIGSRC = trigger_source;
   DMAC->CHCTRLB.bit.LVL = priority;
   DMAC->CHCTRLA.bit.ENABLE = 1;
+
+  enabled_channels |= (1 << channel);
 
   DMAC->CTRL.bit.DMAENABLE = 1;
 }
@@ -80,6 +77,12 @@ void dma_disable_channel(uint8_t channel)
 {
   DMAC->CHID.bit.ID = channel;
   DMAC->CHCTRLA.bit.ENABLE = 0;
+
+  enabled_channels &= ~(1 << channel);
+
+  if(!enabled_channels) {
+    DMAC->CTRL.bit.DMAENABLE = 0;
+  }
 }
 
 void dma_trigger_channel(uint8_t channel)

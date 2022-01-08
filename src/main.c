@@ -38,7 +38,11 @@ int main(void)
   d->BTCNT.bit.BTCNT = sizeof(src);
   d->SRCADDR.bit.SRCADDR = (uintptr_t)(src + sizeof(src));
   d->DSTADDR.bit.DSTADDR = (uintptr_t)(dst + sizeof(dst));
-  dma_enable_channel(channel, DMAC_CHCTRLB_TRIGACT_BLOCK_Val, 0, 0);
+  dma_enable_channel(
+    channel,
+    DMAC_CHCTRLB_TRIGACT_BLOCK_Val,
+    DMAC_CHCTRLB_TRIGSRC_DISABLE_Val,
+    DMAC_CHCTRLB_LVL_LVL0_Val);
   dma_trigger_channel(channel);
 
   while(1) {
