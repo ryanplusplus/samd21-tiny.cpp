@@ -23,4 +23,12 @@ static inline void interrupts_wait_for_interrupt(void)
   __WFI();
 }
 
+#define interrupts_critical_section(...) \
+  do {                                   \
+    uint32_t primask = __get_PRIMASK();  \
+    __disable_irq();                     \
+    __VA_ARGS__                          \
+    __set_PRIMASK(primask);              \
+  } while(0)
+
 #endif

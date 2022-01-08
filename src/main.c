@@ -8,6 +8,12 @@
 
 // fixme
 #include "dma.h"
+static void derp(void)
+{
+  volatile int x;
+  x = 4;
+  (void)x;
+}
 
 static tiny_timer_group_t timer_group;
 
@@ -26,7 +32,7 @@ int main(void)
   const uint8_t src[] = { 0xA5, 0x5A, 0x12, 0x34, 1, 2, 3, 4 };
   uint8_t dst[sizeof(src)];
   dma_init();
-  uint8_t channel = dma_claim_channel();
+  uint8_t channel = dma_channel_claim();
   DmacDescriptor* d = dma_channel_descriptor(channel);
   d->BTCTRL.bit.STEPSIZE = DMAC_BTCTRL_STEPSIZE_X1_Val;
   d->BTCTRL.bit.STEPSEL = DMAC_BTCTRL_STEPSEL_SRC_Val;
@@ -38,12 +44,14 @@ int main(void)
   d->BTCNT.bit.BTCNT = sizeof(src);
   d->SRCADDR.bit.SRCADDR = (uintptr_t)(src + sizeof(src));
   d->DSTADDR.bit.DSTADDR = (uintptr_t)(dst + sizeof(dst));
-  dma_enable_channel(
+  dma_channel_enable(
     channel,
     DMAC_CHCTRLB_TRIGACT_BLOCK_Val,
     DMAC_CHCTRLB_TRIGSRC_DISABLE_Val,
     DMAC_CHCTRLB_LVL_LVL0_Val);
-  dma_trigger_channel(channel);
+  dma_channel_install_interrupt_handler(channel, derp);
+  dma_channel_enable_interrupt(channel);
+  dma_channel_trigger(channel);
 
   while(1) {
     if(!tiny_timer_group_run(&timer_group)) {
