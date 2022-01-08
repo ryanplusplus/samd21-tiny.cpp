@@ -16,14 +16,17 @@ enum {
 tiny_static_assert(dma_channel_count <= maximum_channel_count);
 
 // fixme these should be static
-DmacDescriptor descriptor[dma_channel_count];
-DmacDescriptor write_back_descriptor[dma_channel_count];
+__attribute__((__aligned__(16))) DmacDescriptor descriptor[dma_channel_count];
+__attribute__((__aligned__(16))) DmacDescriptor write_back_descriptor[dma_channel_count];
+
+// fixme this could be a bitfield
 static bool used[dma_channel_count];
 
 void dma_init(void)
 {
   // Enable DMAC clock
   PM->AHBMASK.bit.DMAC_ = 1;
+  PM->APBBMASK.bit.DMAC_ = 1;
 
   DMAC->BASEADDR.reg = (uintptr_t)descriptor;
   DMAC->WRBADDR.reg = (uintptr_t)write_back_descriptor;
@@ -61,13 +64,18 @@ void dma_enable_channel(
   uint8_t trigger_source,
   uint8_t priority)
 {
-  DMAC->CTRL.bit.DMAENABLE = 1;
+  // fixme is this necessary?
+  DMAC->CTRL.bit.DMAENABLE = 0;
+  while(DMAC->CTRL.bit.DMAENABLE) {
+  }
 
   DMAC->CHID.bit.ID = channel;
   DMAC->CHCTRLB.bit.TRIGACT = trigger_action;
   DMAC->CHCTRLB.bit.TRIGSRC = trigger_source;
   DMAC->CHCTRLB.bit.LVL = priority;
   DMAC->CHCTRLA.bit.ENABLE = 1;
+
+  DMAC->CTRL.bit.DMAENABLE = 1;
 }
 
 void dma_disable_channel(uint8_t channel)
@@ -79,13 +87,6 @@ void dma_disable_channel(uint8_t channel)
 void dma_trigger_channel(uint8_t channel)
 {
   DMAC->SWTRIGCTRL.vec.SWTRIG |= (1 << channel);
-}
-
-void DMAC_Handler(void)
-{
-  volatile int x;
-  x = 4;
-  (void)x;
 }
 
 // CHINTENCLR.TCMPL -> transfer complete interrupt
