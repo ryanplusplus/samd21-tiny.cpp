@@ -23,11 +23,11 @@ int main(void)
   interrupts_enable();
 
   // fixme
-  static uint8_t src[] = { 0xA5, 0x5A, 0x12, 0x34, 1, 2, 3, 4 };
-  static uint8_t dst[sizeof(src)];
+  const uint8_t src[] = { 0xA5, 0x5A, 0x12, 0x34, 1, 2, 3, 4 };
+  uint8_t dst[sizeof(src)];
   dma_init();
-  dma_claim_channel(0);
-  DmacDescriptor* d = dma_channel_descriptor(0);
+  uint8_t channel = dma_claim_channel();
+  DmacDescriptor* d = dma_channel_descriptor(channel);
   d->BTCTRL.bit.STEPSIZE = DMAC_BTCTRL_STEPSIZE_X1_Val;
   d->BTCTRL.bit.STEPSEL = DMAC_BTCTRL_STEPSEL_SRC_Val;
   d->BTCTRL.bit.DSTINC = 1;
@@ -38,8 +38,8 @@ int main(void)
   d->BTCNT.bit.BTCNT = sizeof(src);
   d->SRCADDR.bit.SRCADDR = (uintptr_t)(src + sizeof(src));
   d->DSTADDR.bit.DSTADDR = (uintptr_t)(dst + sizeof(dst));
-  dma_enable_channel(0, DMAC_CHCTRLB_TRIGACT_BLOCK_Val, 0, 0);
-  dma_trigger_channel(0);
+  dma_enable_channel(channel, DMAC_CHCTRLB_TRIGACT_BLOCK_Val, 0, 0);
+  dma_trigger_channel(channel);
 
   while(1) {
     if(!tiny_timer_group_run(&timer_group)) {
