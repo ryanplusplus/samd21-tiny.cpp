@@ -11,7 +11,6 @@
 
 typedef void (*dma_interrupt_handler_t)(void);
 
-void dma_init(void);
 uint8_t dma_channel_claim(void);
 DmacDescriptor* dma_channel_descriptor(uint8_t channel);
 DmacDescriptor* dma_channel_write_back_descriptor(uint8_t channel);

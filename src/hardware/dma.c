@@ -25,8 +25,16 @@ static uint8_t next_channel;
 static uint16_t enabled_channels;
 static uint16_t enabled_channels;
 
-void dma_init(void)
+static void init(void)
 {
+  static bool initialized;
+
+  if(initialized) {
+    return;
+  }
+
+  initialized = true;
+
   // Enable DMAC clock
   PM->AHBMASK.bit.DMAC_ = 1;
   PM->APBBMASK.bit.DMAC_ = 1;
@@ -45,6 +53,8 @@ void dma_init(void)
 
 uint8_t dma_channel_claim(void)
 {
+  init();
+
   if(next_channel >= dma_channel_count) {
     NVIC_SystemReset();
   }
