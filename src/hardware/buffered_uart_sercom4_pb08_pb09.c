@@ -177,7 +177,7 @@ static inline void configure_receive_channel(void)
     receive_channel,
     DMAC_CHCTRLB_TRIGACT_BEAT_Val,
     SERCOM4_DMAC_ID_RX,
-    DMAC_CHCTRLB_LVL_LVL1_Val);
+    DMAC_CHCTRLB_LVL_LVL3_Val);
 }
 
 static inline void configure_send_channel(void)
