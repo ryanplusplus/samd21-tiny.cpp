@@ -16,8 +16,9 @@ enum {
 
 tiny_static_assert(dma_channel_count <= maximum_channel_count);
 
-static DmacDescriptor descriptor[dma_channel_count] __attribute__((__aligned__(16)));
-static DmacDescriptor write_back_descriptor[dma_channel_count] __attribute__((__aligned__(16)));
+// fixme
+DmacDescriptor descriptor[dma_channel_count] __attribute__((__aligned__(16)));
+DmacDescriptor write_back_descriptor[dma_channel_count] __attribute__((__aligned__(16)));
 
 static dma_interrupt_handler_t handler[dma_channel_count];
 
