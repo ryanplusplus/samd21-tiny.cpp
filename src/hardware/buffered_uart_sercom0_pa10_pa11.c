@@ -39,8 +39,6 @@ static void send(i_tiny_buffered_uart_t* self, const void* buffer, uint16_t buff
     DMAC_CHCTRLB_TRIGACT_BEAT_Val,
     SERCOM0_DMAC_ID_TX,
     DMAC_CHCTRLB_LVL_LVL0_Val);
-
-  dma_channel_trigger(send_channel);
 }
 
 static i_tiny_event_t* on_send_complete(i_tiny_buffered_uart_t* self)
