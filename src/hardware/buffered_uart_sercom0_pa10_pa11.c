@@ -13,8 +13,7 @@
 #include "tiny_utils.h"
 
 enum {
-  receive_buffer_size = 100,
-  receive_publication_buffer_size = 50
+  receive_buffer_size = 100
 };
 
 static tiny_event_t send_complete;
@@ -24,7 +23,7 @@ static uint8_t send_channel;
 static uint8_t receive_channel;
 
 static uint8_t receive_buffer[receive_buffer_size];
-static uint16_t receive_tail;
+static uint16_t receive_tail = 20;
 
 static bool send_completed;
 
@@ -71,27 +70,22 @@ static inline uint16_t _receive_head(void)
   return receive_buffer_size - receive_dma_beat_count;
 }
 
-static void run(i_tiny_buffered_uart_t* self)
+static inline void handle_receive_ready(void)
 {
-  (void)self;
-
-  if(send_completed) {
-    send_completed = false;
-    tiny_event_publish(&send_complete, NULL);
-  }
-
   uint16_t receive_head = _receive_head();
-  uint16_t count = (receive_head - receive_tail) % 100;
 
-  if(count) {
-    uint8_t publication_buffer[receive_publication_buffer_size];
+  if(receive_head != receive_tail) {
+    uint8_t publication_buffer[receive_buffer_size];
+    uint16_t count;
 
     if(receive_tail > receive_head) {
       memcpy(publication_buffer, receive_buffer + receive_tail, receive_buffer_size - receive_tail);
       memcpy(publication_buffer + (receive_buffer_size - receive_tail), receive_buffer, receive_head);
+      count = receive_buffer_size - receive_tail + receive_head;
     }
     else {
       memcpy(publication_buffer, receive_buffer + receive_tail, receive_head - receive_tail);
+      count = receive_head - receive_tail;
     }
 
     receive_tail = receive_head;
@@ -102,6 +96,21 @@ static void run(i_tiny_buffered_uart_t* self)
     };
     tiny_event_publish(&receive, &args);
   }
+}
+
+static inline void handle_send_complete(void)
+{
+  if(send_completed) {
+    send_completed = false;
+    tiny_event_publish(&send_complete, NULL);
+  }
+}
+
+static void run(i_tiny_buffered_uart_t* self)
+{
+  (void)self;
+  handle_receive_ready();
+  handle_send_complete();
 }
 
 static inline void initialize_peripheral(uint32_t baud)
@@ -147,7 +156,7 @@ static void dma_send_complete(void)
   send_completed = true;
 }
 
-static void configure_receive_channel(void)
+static inline void configure_receive_channel(void)
 {
   receive_channel = dma_channel_claim();
 
@@ -171,7 +180,7 @@ static void configure_receive_channel(void)
     DMAC_CHCTRLB_LVL_LVL1_Val);
 }
 
-static void configuree_send_channel(void)
+static inline void configure_send_channel(void)
 {
   send_channel = dma_channel_claim();
 
@@ -198,7 +207,7 @@ i_tiny_buffered_uart_t* buffered_uart_sercom0_pa10_pa11_init(uint32_t baud)
 
   initialize_peripheral(baud);
   configure_receive_channel();
-  configuree_send_channel();
+  configure_send_channel();
 
   static i_tiny_buffered_uart_t self;
   self.api = &api;
