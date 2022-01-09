@@ -73,8 +73,7 @@ static inline void initialize_peripheral(uint32_t baud)
   while(SERCOM4->USART.SYNCBUSY.bit.CTRLB) {
   }
 
-  SERCOM4->USART.BAUD.reg =
-    0xFFFF - ((16 * 0xFFFF * baud) / clock_gclk0_frequency);
+  SERCOM4->USART.BAUD.reg = 0xFFFF - ((16ULL * 0xFFFF * baud) / clock_gclk0_frequency);
 
   SERCOM4->USART.INTENSET.reg =
     SERCOM_USART_INTENSET_TXC |
