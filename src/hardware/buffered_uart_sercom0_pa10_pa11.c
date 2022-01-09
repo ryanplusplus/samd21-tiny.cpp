@@ -4,6 +4,7 @@
  */
 
 #include <stdbool.h>
+#include <string.h>
 #include "sam.h"
 #include "clock.h"
 #include "dma.h"
@@ -12,7 +13,8 @@
 #include "tiny_utils.h"
 
 enum {
-  receive_buffer_size = 100
+  receive_buffer_size = 100,
+  receive_publication_buffer_size = 50
 };
 
 static tiny_event_t send_complete;
@@ -22,6 +24,7 @@ static uint8_t send_channel;
 static uint8_t receive_channel;
 
 static uint8_t receive_buffer[receive_buffer_size];
+static uint16_t receive_tail;
 
 static bool send_completed;
 
@@ -53,6 +56,21 @@ static i_tiny_event_t* on_receive(i_tiny_buffered_uart_t* self)
   return &receive.interface;
 }
 
+static inline uint16_t _receive_head(void)
+{
+  DMAC_ACTIVE_Type active = DMAC->ACTIVE;
+  uint16_t receive_dma_beat_count;
+
+  if(active.bit.ID == receive_channel) {
+    receive_dma_beat_count = active.bit.BTCNT;
+  }
+  else {
+    receive_dma_beat_count = dma_channel_write_back_descriptor(receive_channel)->BTCNT.reg;
+  }
+
+  return receive_buffer_size - receive_dma_beat_count;
+}
+
 static void run(i_tiny_buffered_uart_t* self)
 {
   (void)self;
@@ -62,8 +80,28 @@ static void run(i_tiny_buffered_uart_t* self)
     tiny_event_publish(&send_complete, NULL);
   }
 
-  // fixme
-  // check for receive complete
+  uint16_t receive_head = _receive_head();
+  uint16_t count = (receive_head - receive_tail) % 100;
+
+  if(count) {
+    uint8_t publication_buffer[receive_publication_buffer_size];
+
+    if(receive_tail > receive_head) {
+      memcpy(publication_buffer, receive_buffer + receive_tail, receive_buffer_size - receive_tail);
+      memcpy(publication_buffer + (receive_buffer_size - receive_tail), receive_buffer, receive_head);
+    }
+    else {
+      memcpy(publication_buffer, receive_buffer + receive_tail, receive_head - receive_tail);
+    }
+
+    receive_tail = receive_head;
+
+    tiny_buffered_uart_on_receive_args_t args = {
+      .buffer = publication_buffer,
+      .buffer_size = count,
+    };
+    tiny_event_publish(&receive, &args);
+  }
 }
 
 static inline void initialize_peripheral(uint32_t baud)
@@ -109,25 +147,7 @@ static void dma_send_complete(void)
   send_completed = true;
 }
 
-static void initialize_send_channel(void)
-{
-  send_channel = dma_channel_claim();
-
-  DmacDescriptor* d = dma_channel_descriptor(send_channel);
-  d->BTCTRL.bit.STEPSIZE = DMAC_BTCTRL_STEPSIZE_X1_Val;
-  d->BTCTRL.bit.STEPSEL = DMAC_BTCTRL_STEPSEL_SRC_Val;
-  d->BTCTRL.bit.DSTINC = 0;
-  d->BTCTRL.bit.SRCINC = 1;
-  d->BTCTRL.bit.BEATSIZE = DMAC_BTCTRL_BEATSIZE_BYTE_Val;
-  d->BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
-  d->BTCTRL.bit.VALID = 1;
-  d->DESCADDR.bit.DESCADDR = 0;
-
-  dma_channel_install_interrupt_handler(send_channel, dma_send_complete);
-  dma_channel_enable_interrupt(send_channel);
-}
-
-static void initialize_receive_channel(void)
+static void configure_receive_channel(void)
 {
   receive_channel = dma_channel_claim();
 
@@ -151,6 +171,24 @@ static void initialize_receive_channel(void)
     DMAC_CHCTRLB_LVL_LVL1_Val);
 }
 
+static void configuree_send_channel(void)
+{
+  send_channel = dma_channel_claim();
+
+  DmacDescriptor* d = dma_channel_descriptor(send_channel);
+  d->BTCTRL.bit.STEPSIZE = DMAC_BTCTRL_STEPSIZE_X1_Val;
+  d->BTCTRL.bit.STEPSEL = DMAC_BTCTRL_STEPSEL_SRC_Val;
+  d->BTCTRL.bit.DSTINC = 0;
+  d->BTCTRL.bit.SRCINC = 1;
+  d->BTCTRL.bit.BEATSIZE = DMAC_BTCTRL_BEATSIZE_BYTE_Val;
+  d->BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
+  d->BTCTRL.bit.VALID = 1;
+  d->DESCADDR.bit.DESCADDR = 0;
+
+  dma_channel_install_interrupt_handler(send_channel, dma_send_complete);
+  dma_channel_enable_interrupt(send_channel);
+}
+
 static const i_tiny_buffered_uart_api_t api = { send, on_send_complete, on_receive, run };
 
 i_tiny_buffered_uart_t* buffered_uart_sercom0_pa10_pa11_init(uint32_t baud)
@@ -159,8 +197,8 @@ i_tiny_buffered_uart_t* buffered_uart_sercom0_pa10_pa11_init(uint32_t baud)
   tiny_event_init(&receive);
 
   initialize_peripheral(baud);
-  initialize_send_channel();
-  initialize_receive_channel();
+  configure_receive_channel();
+  configuree_send_channel();
 
   static i_tiny_buffered_uart_t self;
   self.api = &api;
