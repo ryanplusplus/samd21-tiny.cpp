@@ -70,11 +70,11 @@ void dma_channel_enable(uint8_t channel, uint8_t trigger_action, uint8_t trigger
     DMAC->CHCTRLB.bit.TRIGSRC = trigger_source;
     DMAC->CHCTRLB.bit.LVL = priority;
     DMAC->CHCTRLA.bit.ENABLE = 1;
-
-    enabled_channels |= (1 << channel);
-
-    DMAC->CTRL.bit.DMAENABLE = 1;
   });
+
+  enabled_channels |= (1 << channel);
+
+  DMAC->CTRL.bit.DMAENABLE = 1;
 }
 
 void dma_channel_disable(uint8_t channel)
@@ -82,13 +82,13 @@ void dma_channel_disable(uint8_t channel)
   interrupts_critical_section({
     DMAC->CHID.bit.ID = channel;
     DMAC->CHCTRLA.bit.ENABLE = 0;
-
-    enabled_channels &= ~(1 << channel);
-
-    if(!enabled_channels) {
-      DMAC->CTRL.bit.DMAENABLE = 0;
-    }
   });
+
+  enabled_channels &= ~(1 << channel);
+
+  if(!enabled_channels) {
+    DMAC->CTRL.bit.DMAENABLE = 0;
+  }
 }
 
 void dma_channel_trigger(uint8_t channel)
