@@ -25,21 +25,6 @@ static uint8_t receive_buffer[receive_buffer_size];
 
 static bool send_completed;
 
-// fixme
-// void SERCOM0_Handler(void)
-// {
-//   if(SERCOM0->USART.INTFLAG.bit.TXC) {
-//     SERCOM0->USART.INTFLAG.reg |= SERCOM_USART_INTFLAG_TXC;
-//     tiny_event_publish(&send_complete, NULL);
-//   }
-
-//   while(SERCOM0->USART.INTFLAG.bit.RXC) {
-//     const uint8_t byte = SERCOM0->USART.DATA.reg;
-//     tiny_event_publish(&receive, NULL);
-//     (void)byte;
-//   }
-// }
-
 static void send(i_tiny_buffered_uart_t* self, const void* buffer, uint16_t buffer_size)
 {
   (void)self;
@@ -79,6 +64,7 @@ static void run(i_tiny_buffered_uart_t* self)
     tiny_event_publish(&send_complete, NULL);
   }
 
+  // fixme
   // check for receive complete
 }
 
@@ -115,15 +101,6 @@ static inline void initialize_peripheral(uint32_t baud)
 
   SERCOM0->USART.BAUD.reg =
     0xFFFF - ((16 * 0xFFFF * baud) / clock_gclk0_frequency);
-
-  // fixme
-  // {
-  //   SERCOM0->USART.INTENSET.reg =
-  //     SERCOM_USART_INTENSET_TXC |
-  //     SERCOM_USART_INTENSET_RXC;
-
-  //   NVIC_EnableIRQ(SERCOM0_IRQn);
-  // }
 
   SERCOM0->USART.CTRLA.bit.ENABLE = 1;
   while(SERCOM0->USART.SYNCBUSY.bit.ENABLE) {
