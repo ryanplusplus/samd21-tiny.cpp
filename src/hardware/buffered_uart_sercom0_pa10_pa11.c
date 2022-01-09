@@ -25,6 +25,7 @@ static uint8_t receive_buffer[receive_buffer_size];
 
 static bool send_completed;
 
+// fixme
 // void SERCOM0_Handler(void)
 // {
 //   if(SERCOM0->USART.INTFLAG.bit.TXC) {
@@ -34,7 +35,8 @@ static bool send_completed;
 
 //   while(SERCOM0->USART.INTFLAG.bit.RXC) {
 //     const uint8_t byte = SERCOM0->USART.DATA.reg;
-//     tiny_event_publish(&receive, &(tiny_buffered_uart_on_receive_args_t){ .byte = byte });
+//     tiny_event_publish(&receive, NULL);
+//     (void)byte;
 //   }
 // }
 
@@ -45,7 +47,7 @@ static void send(i_tiny_buffered_uart_t* self, const void* buffer, uint16_t buff
   DmacDescriptor* d = dma_channel_descriptor(send_channel);
   d->BTCNT.bit.BTCNT = buffer_size;
   d->SRCADDR.bit.SRCADDR = (uintptr_t)buffer + buffer_size;
-  d->DSTADDR.bit.DSTADDR = (uintptr_t)SERCOM0->USART.DATA.reg;
+  d->DSTADDR.bit.DSTADDR = (uintptr_t)&SERCOM0->USART.DATA.reg;
 
   dma_channel_enable(
     send_channel,
@@ -114,11 +116,14 @@ static inline void initialize_peripheral(uint32_t baud)
   SERCOM0->USART.BAUD.reg =
     0xFFFF - ((16 * 0xFFFF * baud) / clock_gclk0_frequency);
 
-  // SERCOM0->USART.INTENSET.reg =
-  //   SERCOM_USART_INTENSET_TXC |
-  //   SERCOM_USART_INTENSET_RXC;
+  // fixme
+  // {
+  //   SERCOM0->USART.INTENSET.reg =
+  //     SERCOM_USART_INTENSET_TXC |
+  //     SERCOM_USART_INTENSET_RXC;
 
-  // NVIC_EnableIRQ(SERCOM0_IRQn);
+  //   NVIC_EnableIRQ(SERCOM0_IRQn);
+  // }
 
   SERCOM0->USART.CTRLA.bit.ENABLE = 1;
   while(SERCOM0->USART.SYNCBUSY.bit.ENABLE) {
@@ -172,7 +177,7 @@ static void initialize_receive_channel(void)
   d->BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
   d->BTCTRL.bit.VALID = 1;
   d->BTCNT.bit.BTCNT = receive_buffer_size;
-  d->SRCADDR.bit.SRCADDR = (uintptr_t)SERCOM0->USART.DATA.reg;
+  d->SRCADDR.bit.SRCADDR = (uintptr_t)&SERCOM0->USART.DATA.reg;
   d->DSTADDR.bit.DSTADDR = (uintptr_t)(receive_buffer + receive_buffer_size);
   d->DESCADDR.bit.DESCADDR = (uintptr_t)d;
 
@@ -180,12 +185,12 @@ static void initialize_receive_channel(void)
     receive_channel,
     DMAC_CHCTRLB_TRIGACT_BEAT_Val,
     SERCOM0_DMAC_ID_RX,
-    DMAC_CHCTRLB_LVL_LVL0_Val);
+    DMAC_CHCTRLB_LVL_LVL1_Val);
 }
 
 static const i_tiny_buffered_uart_api_t api = { send, on_send_complete, on_receive, run };
 
-i_tiny_buffered_uart_t* uart_sercom0_pa10_pa11_init(uint32_t baud)
+i_tiny_buffered_uart_t* buffered_uart_sercom0_pa10_pa11_init(uint32_t baud)
 {
   tiny_event_init(&send_complete);
   tiny_event_init(&receive);
