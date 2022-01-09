@@ -11,11 +11,17 @@
 #include "tiny_event.h"
 #include "tiny_utils.h"
 
+enum {
+  receive_buffer_size = 100
+};
+
 static tiny_event_t send_complete;
 static tiny_event_t receive;
 
 static uint8_t send_channel;
 static uint8_t receive_channel;
+
+static uint8_t receive_buffer[receive_buffer_size];
 
 static bool send_completed;
 
@@ -127,6 +133,7 @@ static void dma_send_complete(void)
 static void initialize_send_channel(void)
 {
   send_channel = dma_channel_claim();
+
   DmacDescriptor* d = dma_channel_descriptor(send_channel);
   d->BTCTRL.bit.STEPSIZE = DMAC_BTCTRL_STEPSIZE_X1_Val;
   d->BTCTRL.bit.STEPSEL = DMAC_BTCTRL_STEPSEL_SRC_Val;
@@ -136,6 +143,7 @@ static void initialize_send_channel(void)
   d->BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
   d->BTCTRL.bit.VALID = 1;
   d->DESCADDR.bit.DESCADDR = 0;
+
   // d->BTCNT.bit.BTCNT = sizeof(src);
   // d->SRCADDR.bit.SRCADDR = (uintptr_t)(src + sizeof(src));
   // d->DSTADDR.bit.DSTADDR = (uintptr_t)(dst + sizeof(dst));
@@ -144,14 +152,35 @@ static void initialize_send_channel(void)
   //   DMAC_CHCTRLB_TRIGACT_BLOCK_Val,
   //   DMAC_CHCTRLB_TRIGSRC_DISABLE_Val,
   //   DMAC_CHCTRLB_LVL_LVL0_Val);
+
   dma_channel_install_interrupt_handler(send_channel, dma_send_complete);
   dma_channel_enable_interrupt(send_channel);
+
   // dma_channel_trigger(channel);
 }
 
 static void initialize_receive_channel(void)
 {
   receive_channel = dma_channel_claim();
+
+  DmacDescriptor* d = dma_channel_descriptor(receive_channel);
+  d->BTCTRL.bit.STEPSIZE = DMAC_BTCTRL_STEPSIZE_X1_Val;
+  d->BTCTRL.bit.STEPSEL = DMAC_BTCTRL_STEPSEL_DST_Val;
+  d->BTCTRL.bit.DSTINC = 1;
+  d->BTCTRL.bit.SRCINC = 0;
+  d->BTCTRL.bit.BEATSIZE = DMAC_BTCTRL_BEATSIZE_BYTE_Val;
+  d->BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
+  d->BTCTRL.bit.VALID = 1;
+  d->BTCNT.bit.BTCNT = receive_buffer_size;
+  d->SRCADDR.bit.SRCADDR = (uintptr_t)SERCOM0->USART.DATA.reg;
+  d->DSTADDR.bit.DSTADDR = (uintptr_t)(receive_buffer + receive_buffer_size);
+  d->DESCADDR.bit.DESCADDR = (uintptr_t)d;
+
+  dma_channel_enable(
+    receive_channel,
+    DMAC_CHCTRLB_TRIGACT_BEAT_Val,
+    SERCOM0_DMAC_ID_RX,
+    DMAC_CHCTRLB_LVL_LVL0_Val);
 }
 
 static const i_tiny_buffered_uart_api_t api = { send, on_send_complete, on_receive, run };
