@@ -6,15 +6,12 @@
 #include <stdbool.h>
 #include "sam.h"
 #include "interrupts.h"
-#include "dma_configuration.h"
 #include "dma.h"
 #include "tiny_utils.h"
 
 enum {
-  maximum_channel_count = 12
+  dma_channel_count = 12
 };
-
-tiny_static_assert(dma_channel_count <= maximum_channel_count);
 
 // fixme
 DmacDescriptor descriptor[dma_channel_count] __attribute__((__aligned__(16)));
