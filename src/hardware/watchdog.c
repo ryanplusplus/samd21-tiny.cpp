@@ -6,6 +6,7 @@
 #include "watchdog.h"
 #include "sam.h"
 #include "clock.h"
+#include "tiny_utils.h"
 
 tiny_static_assert(clock_gclk2_frequency == 32768);
 
