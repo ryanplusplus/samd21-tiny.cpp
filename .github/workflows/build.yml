@@ -12,15 +12,17 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-20.04, ubuntu-latest]
+        os: [ubuntu-18.04, ubuntu-20.04, ubuntu-latest, macos-11, macos-latest]
 
     steps:
     - uses: carlosperate/arm-none-eabi-gcc-action@v1
       with:
         release: '10.3-2021.10'
 
+    - uses: SimenB/github-actions-cpu-cores@v1
+
     - uses: actions/checkout@v2
       with:
         submodules: 'recursive'
 
-    - run: make -j$(nproc) -f target.mk
+    - run: make -j${{ steps.cpu-cores.outputs.count }} -f target.mk
