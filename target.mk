@@ -14,7 +14,7 @@ BLACK_MAGIC_POWER_TARGET ?= N
 DEFINES := \
   __SAMD21G18A__ \
 
-include tools/defaults.mk
+include tools2/defaults.mk
 
 INC_DIRS := \
 
@@ -30,7 +30,7 @@ include lib/tiny/lib_tiny.mk
 include lib/tiny-devices/lib_tiny-devices.mk
 include lib_hardware.mk
 
-include tools/tools.mk
+include tools2/tools.mk
 include docs.mk
 
 .PHONY: watch
