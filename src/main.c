@@ -3,7 +3,7 @@
  * @brief
  */
 
-#include "board/metro_m0.h"
+#include "board.h"
 #include "tiny_timer.h"
 
 static tiny_timer_group_t timer_group;
