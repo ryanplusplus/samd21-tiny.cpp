@@ -2,7 +2,7 @@ include tools/setup.mk
 
 TARGET := target
 BUILD_DIR := ./build
-BOARD := metro_m0
+BOARD ?= metro_m0
 
 include board/$(BOARD).mk
 include tools/defaults.mk

@@ -3,8 +3,8 @@
  * @brief
  */
 
-#ifndef xiao_h
-#define xiao_h
+#ifndef board_h
+#define board_h
 
 #include "sam.h"
 #include "interrupts.h"

@@ -1,7 +1,7 @@
 {
   "configurations": [
     {
-      "name": "SAMD21G18",
+      "name": "metro_m0",
       "defines": [
         "__SAMD21G18A__"
       ],
@@ -9,6 +9,24 @@
         "${workspaceFolder}/lib/asf4/samd21/include",
         "${workspaceFolder}/lib/asf4/samd21/CMSIS/Include",
         "${workspaceFolder}/lib/tiny/include",
+        "${workspaceFolder}/src/board/metro_m0",
+        "${workspaceFolder}/src/hardware"
+      ],
+      "intelliSenseMode": "gcc-arm",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "compilerPath": "arm-none-eabi-gcc"
+    },
+    {
+      "name": "xiao",
+      "defines": [
+        "__SAMD21G18A__"
+      ],
+      "includePath": [
+        "${workspaceFolder}/lib/asf4/samd21/include",
+        "${workspaceFolder}/lib/asf4/samd21/CMSIS/Include",
+        "${workspaceFolder}/lib/tiny/include",
+        "${workspaceFolder}/src/board/xiao",
         "${workspaceFolder}/src/hardware"
       ],
       "intelliSenseMode": "gcc-arm",

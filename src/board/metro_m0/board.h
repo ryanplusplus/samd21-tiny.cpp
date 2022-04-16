@@ -3,8 +3,8 @@
  * @brief
  */
 
-#ifndef metro_m0_h
-#define metro_m0_h
+#ifndef board_h
+#define board_h
 
 #include "sam.h"
 #include "interrupts.h"
