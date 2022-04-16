@@ -13,7 +13,6 @@ enum {
   dma_channel_count = 12
 };
 
-// fixme
 DmacDescriptor descriptor[dma_channel_count] __attribute__((__aligned__(16)));
 DmacDescriptor write_back_descriptor[dma_channel_count] __attribute__((__aligned__(16)));
 
