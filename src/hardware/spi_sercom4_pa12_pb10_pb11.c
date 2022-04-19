@@ -8,6 +8,8 @@
 #include "spi_sercom4_pa12_pb10_pb11.h"
 #include "tiny_utils.h"
 
+#ifdef SERCOM4
+
 static void transfer(
   i_tiny_spi_t* self,
   const void* _write_buffer,
@@ -92,3 +94,5 @@ i_tiny_spi_t* spi_sercom4_pa12_pb10_pb11_init(bool cpol, bool cpha, bool msb_fir
   self.api = &api;
   return &self;
 }
+
+#endif

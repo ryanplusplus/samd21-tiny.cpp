@@ -12,6 +12,8 @@
 #include "tiny_event.h"
 #include "tiny_utils.h"
 
+#ifdef SERCOM0
+
 enum {
   receive_buffer_size = 100
 };
@@ -213,3 +215,5 @@ i_tiny_buffered_uart_t* buffered_uart_sercom0_pa10_pa11_init(uint32_t baud)
   self.api = &api;
   return &self;
 }
+
+#endif

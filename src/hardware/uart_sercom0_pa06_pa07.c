@@ -5,7 +5,7 @@
 
 #include "sam.h"
 #include "clock.h"
-#include "uart_sercom0_pa10_pa11.h"
+#include "uart_sercom0_pa06_pa07.h"
 #include "tiny_event.h"
 
 #ifdef SERCOM0
@@ -57,11 +57,11 @@ static inline void initialize_peripheral(uint32_t baud)
   while(GCLK->STATUS.bit.SYNCBUSY) {
   }
 
-  PORT->Group[0].PMUX[10 >> 1].bit.PMUXE = MUX_PA10C_SERCOM0_PAD2;
-  PORT->Group[0].PINCFG[10].bit.PMUXEN = 1;
+  PORT->Group[0].PMUX[6 >> 1].bit.PMUXE = MUX_PA06D_SERCOM0_PAD2;
+  PORT->Group[0].PINCFG[6].bit.PMUXEN = 1;
 
-  PORT->Group[0].PMUX[11 >> 1].bit.PMUXO = MUX_PA11C_SERCOM0_PAD3;
-  PORT->Group[0].PINCFG[11].bit.PMUXEN = 1;
+  PORT->Group[0].PMUX[7 >> 1].bit.PMUXO = MUX_PA07D_SERCOM0_PAD3;
+  PORT->Group[0].PINCFG[7].bit.PMUXEN = 1;
 
   SERCOM0->USART.CTRLA.reg =
     SERCOM_USART_CTRLA_MODE_USART_INT_CLK | // Internal clock
@@ -90,7 +90,7 @@ static inline void initialize_peripheral(uint32_t baud)
 
 static const i_tiny_uart_api_t api = { send, on_send_complete, on_receive };
 
-i_tiny_uart_t* uart_sercom0_pa10_pa11_init(uint32_t baud)
+i_tiny_uart_t* uart_sercom0_pa06_pa07_init(uint32_t baud)
 {
   tiny_event_init(&send_complete);
   tiny_event_init(&receive);

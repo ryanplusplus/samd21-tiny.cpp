@@ -25,4 +25,6 @@ jobs:
       with:
         submodules: 'recursive'
 
-    - run: make -j${{ steps.cpu-cores.outputs.count }} -f target.mk
+    - run: make -j${{ steps.cpu-cores.outputs.count }} -f target.mk BOARD=metro_m0
+    - run: make -j${{ steps.cpu-cores.outputs.count }} -f target.mk BOARD=qt_py
+    - run: make -j${{ steps.cpu-cores.outputs.count }} -f target.mk BOARD=xiao

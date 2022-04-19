@@ -9,6 +9,8 @@
 #include "i2c_sercom2_pa08_pa09.h"
 #include "tiny_utils.h"
 
+#ifdef SERCOM2
+
 enum {
   standard_mode_hz = 100000,
 
@@ -231,3 +233,5 @@ i_tiny_i2c_t* i2c_sercom2_pa08_pa09_init(void)
   self.api = &api;
   return &self;
 }
+
+#endif

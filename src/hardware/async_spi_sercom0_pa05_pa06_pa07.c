@@ -6,8 +6,10 @@
 #include "sam.h"
 #include "clock.h"
 #include "dma.h"
-#include "async_spi_sercom0_pa05_pa06_a07.h"
+#include "async_spi_sercom0_pa05_pa06_pa07.h"
 #include "tiny_utils.h"
+
+#ifdef SERCOM0
 
 static uint8_t write_channel;
 static uint8_t read_channel;
@@ -152,7 +154,7 @@ static inline void configure_dma(void)
 
 static const i_tiny_async_spi_api_t api = { transfer };
 
-i_tiny_async_spi_t* async_spi_sercom0_pa05_pa06_a07_init(bool cpol, bool cpha, bool msb_first, uint32_t baud)
+i_tiny_async_spi_t* async_spi_sercom0_pa05_pa06_pa07_init(bool cpol, bool cpha, bool msb_first, uint32_t baud)
 {
   initialize_peripheral(cpol, cpha, msb_first, baud);
   configure_dma();
@@ -161,3 +163,5 @@ i_tiny_async_spi_t* async_spi_sercom0_pa05_pa06_a07_init(bool cpol, bool cpha, b
   self.api = &api;
   return &self;
 }
+
+#endif

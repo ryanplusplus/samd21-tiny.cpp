@@ -8,6 +8,8 @@
 #include "uart_sercom4_pb08_pb09.h"
 #include "tiny_event.h"
 
+#ifdef SERCOM4
+
 static tiny_event_t send_complete;
 static tiny_event_t receive;
 
@@ -99,3 +101,5 @@ i_tiny_uart_t* uart_sercom4_pb08_pb09_init(uint32_t baud)
   self.api = &api;
   return &self;
 }
+
+#endif

@@ -5,8 +5,10 @@
 
 #include "sam.h"
 #include "clock.h"
-#include "spi_sercom0_pa05_pa06_a07.h"
+#include "spi_sercom0_pa05_pa06_pa07.h"
 #include "tiny_utils.h"
+
+#ifdef SERCOM0
 
 static void transfer(
   i_tiny_spi_t* self,
@@ -84,7 +86,7 @@ static inline void initialize_peripheral(bool cpol, bool cpha, bool msb_first, u
 
 static const i_tiny_spi_api_t api = { transfer };
 
-i_tiny_spi_t* spi_sercom0_pa05_pa06_a07_init(bool cpol, bool cpha, bool msb_first, uint32_t baud)
+i_tiny_spi_t* spi_sercom0_pa05_pa06_pa07_init(bool cpol, bool cpha, bool msb_first, uint32_t baud)
 {
   initialize_peripheral(cpol, cpha, msb_first, baud);
 
@@ -92,3 +94,5 @@ i_tiny_spi_t* spi_sercom0_pa05_pa06_a07_init(bool cpol, bool cpha, bool msb_firs
   self.api = &api;
   return &self;
 }
+
+#endif
