@@ -19,10 +19,9 @@ tiny_static_assert(clock_gclk2_frequency == 32768);
 
 static tiny_timer_t timer;
 
-static void kick(tiny_timer_group_t* _timer_group, void* context)
+static void kick(void* context)
 {
   (void)context;
-  (void)_timer_group;
   WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY;
 }
 

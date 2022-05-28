@@ -19,9 +19,8 @@ static struct {
   tiny_timer_t timer;
 } self;
 
-static void blink(tiny_timer_group_t* group, void* context)
+static void blink(void* context)
 {
-  (void)group;
   (void)context;
   PORT->Group[pin_group].OUTTGL.reg = pin_mask;
 }
