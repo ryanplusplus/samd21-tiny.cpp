@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
   pull_request:
 
 jobs:
@@ -20,6 +21,7 @@ jobs:
         release: '10.3-2021.10'
 
     - uses: SimenB/github-actions-cpu-cores@v1
+      id: cpu-cores
 
     - uses: actions/checkout@v2
       with:
