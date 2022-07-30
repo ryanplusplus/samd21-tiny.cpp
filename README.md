@@ -1,4 +1,4 @@
-# samd21-tiny
+# samd21-tiny.cpp
 Sample project using [`tiny`](https://github.com/ryanplusplus/tiny) with SAMD21G18A.
 
 ## Setup

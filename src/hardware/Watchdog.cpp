@@ -3,12 +3,16 @@
  * @brief
  */
 
-#include "watchdog.h"
+extern "C" {
 #include "sam.h"
-#include "clock.h"
-#include "tiny_utils.h"
+}
 
-tiny_static_assert(clock_gclk2_frequency == 32768);
+#include "Watchdog.hpp"
+#include "Clock.hpp"
+
+using namespace tiny;
+
+static_assert(Clock::gclk2_frequency == 32768, "Unexpected clock configuration");
 
 #define write_and_sync(...)           \
   do {                                \
@@ -17,15 +21,7 @@ tiny_static_assert(clock_gclk2_frequency == 32768);
     }                                 \
   } while(0)
 
-static tiny_timer_t timer;
-
-static void kick(void* context)
-{
-  (void)context;
-  WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY;
-}
-
-void watchdog_init(tiny_timer_group_t* timer_group)
+Watchdog::Watchdog(tiny::TimerGroup& timer_group)
 {
   // Enable WDT clock
   PM->APBAMASK.bit.WDT_ = 1;
@@ -47,5 +43,8 @@ void watchdog_init(tiny_timer_group_t* timer_group)
     WDT->CTRL.reg |= WDT_CTRL_ENABLE;
   });
 
-  tiny_timer_start_periodic(timer_group, &timer, 250, NULL, kick);
+  timer_group.start_periodic(
+    this->timer, period, +[](void*) {
+      WDT->CLEAR.reg = WDT_CLEAR_CLEAR_KEY;
+    });
 }

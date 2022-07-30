@@ -8,7 +8,7 @@
       "includePath": [
         "${workspaceFolder}/lib/asf4/samd21/include",
         "${workspaceFolder}/lib/asf4/samd21/CMSIS/Include",
-        "${workspaceFolder}/lib/tiny/include",
+        "${workspaceFolder}/lib/tiny.cpp/include",
         "${workspaceFolder}/src/board/metro_m0",
         "${workspaceFolder}/src/hardware"
       ],
@@ -25,7 +25,7 @@
       "includePath": [
         "${workspaceFolder}/lib/asf4/samd21/include",
         "${workspaceFolder}/lib/asf4/samd21/CMSIS/Include",
-        "${workspaceFolder}/lib/tiny/include",
+        "${workspaceFolder}/lib/tiny.cpp/include",
         "${workspaceFolder}/src/board/qt_py",
         "${workspaceFolder}/src/hardware"
       ],
@@ -42,7 +42,7 @@
       "includePath": [
         "${workspaceFolder}/lib/asf4/samd21/include",
         "${workspaceFolder}/lib/asf4/samd21/CMSIS/Include",
-        "${workspaceFolder}/lib/tiny/include",
+        "${workspaceFolder}/lib/tiny.cpp/include",
         "${workspaceFolder}/src/board/xiao",
         "${workspaceFolder}/src/hardware"
       ],

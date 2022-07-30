@@ -3,8 +3,11 @@
  * @brief
  */
 
-#include "clock.h"
+extern "C" {
 #include "sam.h"
+}
+
+#include "Clock.hpp"
 
 static inline void configure_bod33_for_48mhz(void)
 {
@@ -130,7 +133,7 @@ static inline void configure_gclk2_with_osc32k_source(void)
   }
 }
 
-void clock_init(void)
+void Clock::init()
 {
   configure_bod33_for_48mhz();
   configure_flash_wait_states_for_48mhz();
