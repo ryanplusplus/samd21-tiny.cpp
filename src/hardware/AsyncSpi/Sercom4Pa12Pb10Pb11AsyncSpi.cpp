@@ -122,16 +122,16 @@ static class : public IAsyncSpi {
     d.BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
     d.BTCTRL.bit.VALID = 1;
     d.BTCNT.bit.BTCNT = buffer_size;
-    d.SRCADDR.bit.SRCADDR = (uintptr_t)&SERCOM4->SPI.DATA.reg;
+    d.SRCADDR.bit.SRCADDR = reinterpret_cast<uintptr_t>(&SERCOM4->SPI.DATA.reg);
     d.DESCADDR.bit.DESCADDR = 0;
 
     if(buffer_size > 1) {
       d.BTCTRL.bit.DSTINC = 1;
-      d.DSTADDR.bit.DSTADDR = (uintptr_t)buffer + buffer_size;
+      d.DSTADDR.bit.DSTADDR = reinterpret_cast<uintptr_t>(buffer) + buffer_size;
     }
     else {
       d.BTCTRL.bit.DSTINC = 0;
-      d.DSTADDR.bit.DSTADDR = (uintptr_t)buffer;
+      d.DSTADDR.bit.DSTADDR = reinterpret_cast<uintptr_t>(buffer);
     }
 
     Dma::enable(
@@ -152,8 +152,8 @@ static class : public IAsyncSpi {
     d.BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
     d.BTCTRL.bit.VALID = 1;
     d.BTCNT.bit.BTCNT = buffer_size;
-    d.SRCADDR.bit.SRCADDR = (uintptr_t)buffer + buffer_size;
-    d.DSTADDR.bit.DSTADDR = (uintptr_t)&SERCOM4->SPI.DATA.reg;
+    d.SRCADDR.bit.SRCADDR = reinterpret_cast<uintptr_t>(buffer) + buffer_size;
+    d.DSTADDR.bit.DSTADDR = reinterpret_cast<uintptr_t>(&SERCOM4->SPI.DATA.reg);
     d.DESCADDR.bit.DESCADDR = 0;
 
     Dma::enable(

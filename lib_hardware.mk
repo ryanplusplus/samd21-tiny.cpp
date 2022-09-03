@@ -7,6 +7,7 @@ hardware_SYS_INC_DIRS := $(SYS_INC_DIRS)
 INC_DIRS += \
   src/hardware \
 	src/hardware/AsyncSpi \
+	src/hardware/BufferedUart \
 	src/hardware/I2c \
   src/hardware/Spi \
   src/hardware/Uart \
@@ -16,6 +17,7 @@ hardware_SRC_FILES := \
 hardware_SRC_DIRS := \
   src/hardware \
 	src/hardware/AsyncSpi \
+	src/hardware/BufferedUart \
 	src/hardware/I2c \
   src/hardware/Spi \
   src/hardware/Uart \
