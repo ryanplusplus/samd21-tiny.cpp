@@ -3,8 +3,8 @@
  * @brief
  */
 
-#ifndef board_hpp
-#define board_hpp
+#ifndef Board_hpp
+#define Board_hpp
 
 #include "Clock.hpp"
 #include "SystemTick.hpp"

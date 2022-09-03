@@ -3,7 +3,7 @@
  * @brief
  */
 
-#include "board.hpp"
+#include "Board.hpp"
 #include "tiny/Timer.hpp"
 
 using namespace tiny;
