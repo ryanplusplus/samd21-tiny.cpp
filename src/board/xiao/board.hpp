@@ -11,7 +11,9 @@
 #include "Watchdog.hpp"
 #include "Interrupts.hpp"
 #include "HeartbeatTemplate.hpp"
+#include "Sercom4Pb08Pb09Uart.hpp"
 
 using Heartbeat = HeartbeatTemplate<PIN_PA17>;
+using Uart = Sercom4Pb08Pb09Uart;
 
 #endif
