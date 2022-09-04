@@ -24,11 +24,12 @@ static void configure_pins()
 }
 
 SercomUartBase<
-  sercom,
+  PM_APBCMASK_SERCOM0,
   SERCOM0_GCLK_ID_CORE,
+  sercom,
   configure_pins,
-  SERCOM_USART_CTRLA_TXPO(1),
-  SERCOM_USART_CTRLA_RXPO(3),
+  SERCOM_USART_CTRLA_TXPO(1), // SERCOM0_PAD2 used for TX
+  SERCOM_USART_CTRLA_RXPO(3), // SERCOM0_PAD3 used for RX
   SERCOM0_IRQn>
   instance;
 

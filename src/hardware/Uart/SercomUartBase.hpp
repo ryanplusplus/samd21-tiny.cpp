@@ -14,13 +14,13 @@ extern "C" {
 #include "tiny/hal/IUart.hpp"
 #include "tiny/SingleSubscriberEvent.hpp"
 
-template <Sercom* sercom(), uint8_t gclk_id, void configure_pins(), uint32_t txpo, uint32_t rxpo, IRQn_Type irq>
+template <uint32_t pm_mask, uint8_t gclk_id, Sercom* sercom(), void configure_pins(), uint32_t txpo, uint32_t rxpo, IRQn_Type irq>
 class SercomUartBase : public tiny::IUart {
  public:
   void init(uint32_t baud)
   {
-    // Enable SERCOM0 clock
-    PM->APBCMASK.reg |= PM_APBCMASK_SERCOM0;
+    // Enable SERCOM clock
+    PM->APBCMASK.reg |= pm_mask;
 
     // Select GCLK0 (DFLL48)
     GCLK->CLKCTRL.reg =
