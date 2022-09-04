@@ -127,7 +127,7 @@ void Dma::install_interrupt_handler(Channel channel, InterruptHandler _handler)
   handler[static_cast<uint8_t>(channel)] = _handler;
 }
 
-void DMAC_Handler()
+extern "C" void DMAC_Handler()
 {
   for(uint8_t channel = 0; channel < next_channel; channel++) {
     bool transfer_complete = false;

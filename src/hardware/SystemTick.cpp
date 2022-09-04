@@ -14,7 +14,7 @@ using namespace tiny;
 
 static volatile ITimeSource::TickCount current_ticks;
 
-void SysTick_Handler()
+extern "C" void SysTick_Handler()
 {
   current_ticks++;
 }

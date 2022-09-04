@@ -32,7 +32,7 @@ SercomUartBase<
   SERCOM4_IRQn>
   instance;
 
-void SERCOM4_Handler()
+extern "C" void SERCOM4_Handler()
 {
   instance.handle_isr();
 }
