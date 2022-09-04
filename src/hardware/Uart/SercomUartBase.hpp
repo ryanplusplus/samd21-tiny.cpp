@@ -69,6 +69,7 @@ class SercomUartBase : public tiny::IUart {
     }
   }
 
+ public:
   void send(uint8_t byte) override
   {
     sercom()->USART.DATA.reg = byte;

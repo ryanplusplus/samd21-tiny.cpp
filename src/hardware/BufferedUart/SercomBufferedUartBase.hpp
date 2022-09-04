@@ -26,6 +26,37 @@ class SercomBufferedUartBase : public tiny::IBufferedUart {
     configure_send_channel();
   }
 
+ public:
+  void send(const void* buffer, uint16_t buffer_size) override
+  {
+    auto& d = Dma::descriptor(send_channel);
+    d.BTCNT.bit.BTCNT = buffer_size;
+    d.SRCADDR.bit.SRCADDR = (uintptr_t)buffer + buffer_size;
+    d.DSTADDR.bit.DSTADDR = (uintptr_t)&sercom()->USART.DATA.reg;
+
+    Dma::enable(
+      send_channel,
+      DMAC_CHCTRLB_TRIGACT_BEAT_Val,
+      dmac_sercom_tx_id,
+      DMAC_CHCTRLB_LVL_LVL0_Val);
+  }
+
+  tiny::IEvent<>& on_send_complete() override
+  {
+    return send_complete;
+  }
+
+  tiny::IEvent<const void*, uint16_t>& on_receive() override
+  {
+    return receive;
+  }
+
+  void run() override
+  {
+    handle_receive_ready();
+    handle_send_complete();
+  }
+
  private:
   void configure_receive_channel(void)
   {
@@ -106,36 +137,6 @@ class SercomBufferedUartBase : public tiny::IBufferedUart {
     }
   }
 
-  void send(const void* buffer, uint16_t buffer_size) override
-  {
-    auto& d = Dma::descriptor(send_channel);
-    d.BTCNT.bit.BTCNT = buffer_size;
-    d.SRCADDR.bit.SRCADDR = (uintptr_t)buffer + buffer_size;
-    d.DSTADDR.bit.DSTADDR = (uintptr_t)&sercom()->USART.DATA.reg;
-
-    Dma::enable(
-      send_channel,
-      DMAC_CHCTRLB_TRIGACT_BEAT_Val,
-      dmac_sercom_tx_id,
-      DMAC_CHCTRLB_LVL_LVL0_Val);
-  }
-
-  tiny::IEvent<>& on_send_complete() override
-  {
-    return send_complete;
-  }
-
-  tiny::IEvent<const void*, uint16_t>& on_receive() override
-  {
-    return receive;
-  }
-
-  void run() override
-  {
-    handle_receive_ready();
-    handle_send_complete();
-  }
-
   void handle_send_complete()
   {
     if(send_completed) {
@@ -184,6 +185,7 @@ class SercomBufferedUartBase : public tiny::IBufferedUart {
     return receive_buffer_size - receive_dma_beat_count;
   }
 
+ private:
   enum {
     receive_buffer_size = 100
   };
@@ -191,12 +193,11 @@ class SercomBufferedUartBase : public tiny::IBufferedUart {
   Dma::Channel send_channel{};
   Dma::Channel receive_channel{};
 
-  uint8_t receive_buffer[receive_buffer_size];
+  uint8_t receive_buffer[receive_buffer_size]{};
   uint16_t receive_tail{};
 
   bool send_completed{};
 
- public:
   tiny::SingleSubscriberEvent<> send_complete{};
   tiny::SingleSubscriberEvent<const void*, uint16_t> receive{};
 };

@@ -54,6 +54,7 @@ class SercomSpiBase : public tiny::ISpi {
     }
   }
 
+ public:
   void transfer(
     const uint8_t* _write_buffer,
     uint8_t* _read_buffer,
