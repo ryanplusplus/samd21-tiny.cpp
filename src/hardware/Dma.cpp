@@ -15,8 +15,8 @@ enum {
   channel_count = 12
 };
 
-DmacDescriptor _descriptor[channel_count] __attribute__((__aligned__(16)));
-DmacDescriptor _write_back_descriptor[channel_count] __attribute__((__aligned__(16)));
+static DmacDescriptor _descriptor[channel_count] __attribute__((__aligned__(16)));
+static DmacDescriptor _write_back_descriptor[channel_count] __attribute__((__aligned__(16)));
 
 using InterruptCallback = void (*)(void*);
 
