@@ -3,14 +3,14 @@
  * @brief
  */
 
-#ifndef Sercom0Pa09Pa10Pa11Spi_hpp
-#define Sercom0Pa09Pa10Pa11Spi_hpp
+#ifndef Sercom2Pa09Pa10Pa11Spi_hpp
+#define Sercom2Pa09Pa10Pa11Spi_hpp
 
 #include <stdint.h>
 #include <stdbool.h>
 #include "tiny/hal/ISpi.hpp"
 
-class Sercom0Pa09Pa10Pa11Spi {
+class Sercom2Pa09Pa10Pa11Spi {
  public:
   static tiny::ISpi& get_instance(
     bool cpol,
