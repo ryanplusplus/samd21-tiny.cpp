@@ -35,6 +35,7 @@ class SercomAsyncSpiBase : public tiny::IAsyncSpi {
     configure_dma();
   }
 
+ private:
   void initialize_peripheral(
     uint8_t cpol,
     uint8_t cpha,
@@ -85,7 +86,8 @@ class SercomAsyncSpiBase : public tiny::IAsyncSpi {
     Dma::enable_interrupt(read_channel);
   }
 
-  void transfer(
+ private:
+  void _transfer(
     const uint8_t* write_buffer,
     uint8_t* read_buffer,
     uint16_t buffer_size,
