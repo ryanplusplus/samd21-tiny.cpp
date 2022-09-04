@@ -11,14 +11,19 @@ extern "C" {
 #include "Interrupts.hpp"
 #include "Dma.hpp"
 
-using namespace Dma;
-
 enum {
   channel_count = 12
 };
 
 DmacDescriptor _descriptor[channel_count] __attribute__((__aligned__(16)));
 DmacDescriptor _write_back_descriptor[channel_count] __attribute__((__aligned__(16)));
+
+using InterruptCallback = void (*)(void*);
+
+struct InterruptHandler {
+  InterruptCallback callback{};
+  void* context{};
+};
 
 static InterruptHandler handler[channel_count];
 
@@ -51,7 +56,7 @@ static void init()
   NVIC_EnableIRQ(DMAC_IRQn);
 }
 
-Channel Dma::claim()
+Dma::Channel Dma::claim()
 {
   init();
 
@@ -122,9 +127,9 @@ void Dma::disable_interrupt(Channel channel)
   });
 }
 
-void Dma::install_interrupt_handler(Channel channel, InterruptHandler _handler)
+void Dma::_install_interrupt_handler(Channel channel, void* context, void (*callback)(void*))
 {
-  handler[static_cast<uint8_t>(channel)] = _handler;
+  handler[static_cast<uint8_t>(channel)] = InterruptHandler{callback, context};
 }
 
 extern "C" void DMAC_Handler()
@@ -141,8 +146,8 @@ extern "C" void DMAC_Handler()
       }
     });
 
-    if(transfer_complete && handler[channel]) {
-      handler[channel]();
+    if(transfer_complete && handler[channel].callback) {
+      handler[channel].callback(handler[channel].context);
     }
   }
 }

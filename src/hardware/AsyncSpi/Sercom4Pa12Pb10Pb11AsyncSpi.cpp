@@ -16,9 +16,6 @@ extern "C" {
 
 using namespace tiny;
 
-static void* context;
-static IAsyncSpi::Callback callback;
-
 static class : public IAsyncSpi {
  public:
   void init(
@@ -82,8 +79,8 @@ static class : public IAsyncSpi {
     read_channel = Dma::claim();
 
     Dma::install_interrupt_handler(
-      read_channel, +[]() {
-        callback(context);
+      read_channel, this, +[](decltype(this) _this) {
+        _this->callback(_this->context);
       });
     Dma::enable_interrupt(read_channel);
   }
@@ -167,6 +164,9 @@ static class : public IAsyncSpi {
   Dma::Channel read_channel{};
 
   uint8_t dummy_read_buffer{};
+
+  void* context{};
+  IAsyncSpi::Callback callback{};
 } instance;
 
 tiny::IAsyncSpi& Sercom4Pa12Pb10Pb11AsyncSpi::get_instance(

@@ -19,9 +19,7 @@ enum {
   receive_buffer_size = 100
 };
 
-static bool send_completed;
-
-static class : public tiny::IBufferedUart {
+class SercomBufferedUartBase : public tiny::IBufferedUart {
  public:
   void init(uint32_t baud)
   {
@@ -69,8 +67,8 @@ static class : public tiny::IBufferedUart {
     d.DESCADDR.bit.DESCADDR = 0;
 
     Dma::install_interrupt_handler(
-      send_channel, +[]() {
-        send_completed = true;
+      send_channel, this, +[](decltype(this) _this) {
+        _this->send_completed = true;
       });
     Dma::enable_interrupt(send_channel);
   }
@@ -197,10 +195,14 @@ static class : public tiny::IBufferedUart {
   uint8_t receive_buffer[receive_buffer_size];
   uint16_t receive_tail{};
 
+  bool send_completed{};
+
  public:
   tiny::SingleSubscriberEvent<> send_complete{};
   tiny::SingleSubscriberEvent<const void*, uint16_t> receive{};
-} instance;
+};
+
+static SercomBufferedUartBase instance;
 
 tiny::IBufferedUart& Sercom0Pa10Pa11BufferedUart::get_instance(uint32_t baud)
 {

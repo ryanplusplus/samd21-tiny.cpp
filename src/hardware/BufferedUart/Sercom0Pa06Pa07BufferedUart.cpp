@@ -19,7 +19,7 @@ enum {
   receive_buffer_size = 100
 };
 
-static bool send_completed;
+// static bool send_completed;
 
 static class : public tiny::IBufferedUart {
  public:
@@ -69,8 +69,8 @@ static class : public tiny::IBufferedUart {
     d.DESCADDR.bit.DESCADDR = 0;
 
     Dma::install_interrupt_handler(
-      send_channel, +[]() {
-        send_completed = true;
+      send_channel, this, +[](decltype(this) _this) {
+        _this->send_completed = true;
       });
     Dma::enable_interrupt(send_channel);
   }
@@ -196,6 +196,8 @@ static class : public tiny::IBufferedUart {
 
   uint8_t receive_buffer[receive_buffer_size];
   uint16_t receive_tail{};
+
+  bool send_completed{};
 
  public:
   tiny::SingleSubscriberEvent<> send_complete{};
