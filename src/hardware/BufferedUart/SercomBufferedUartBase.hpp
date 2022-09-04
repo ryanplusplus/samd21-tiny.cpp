@@ -155,7 +155,7 @@ class SercomBufferedUartBase : public tiny::IBufferedUart {
 
   void handle_receive_ready()
   {
-    uint16_t receive_head = _receive_head();
+    uint16_t receive_head = this->receive_head();
 
     if(receive_head != receive_tail) {
       uint8_t publication_buffer[receive_buffer_size];
@@ -177,7 +177,7 @@ class SercomBufferedUartBase : public tiny::IBufferedUart {
     }
   }
 
-  uint16_t _receive_head()
+  uint16_t receive_head()
   {
     auto channel = DMAC->ACTIVE.bit.ID;
     auto beat_count = DMAC->ACTIVE.bit.BTCNT;

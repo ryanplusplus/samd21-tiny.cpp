@@ -36,6 +36,31 @@ class SercomAsyncSpiBase : public tiny::IAsyncSpi {
   }
 
  private:
+  void _transfer(
+    const uint8_t* write_buffer,
+    uint8_t* read_buffer,
+    uint16_t buffer_size,
+    void* _context,
+    Callback _callback) override
+  {
+    context = _context;
+    callback = _callback;
+
+    if(write_buffer && read_buffer) {
+      configure_read_channel(read_buffer, buffer_size);
+      configure_write_channel(write_buffer, buffer_size);
+    }
+    else if(write_buffer) {
+      configure_read_channel(&dummy_read_buffer, 1);
+      configure_write_channel(write_buffer, buffer_size);
+    }
+    else if(read_buffer) {
+      configure_read_channel(read_buffer, buffer_size);
+      configure_write_channel(read_buffer, buffer_size);
+    }
+  }
+
+ private:
   void initialize_peripheral(
     uint8_t cpol,
     uint8_t cpha,
@@ -84,31 +109,6 @@ class SercomAsyncSpiBase : public tiny::IAsyncSpi {
         _this->callback(_this->context);
       });
     Dma::enable_interrupt(read_channel);
-  }
-
- private:
-  void _transfer(
-    const uint8_t* write_buffer,
-    uint8_t* read_buffer,
-    uint16_t buffer_size,
-    void* _context,
-    Callback _callback) override
-  {
-    context = _context;
-    callback = _callback;
-
-    if(write_buffer && read_buffer) {
-      configure_read_channel(read_buffer, buffer_size);
-      configure_write_channel(write_buffer, buffer_size);
-    }
-    else if(write_buffer) {
-      configure_read_channel(&dummy_read_buffer, 1);
-      configure_write_channel(write_buffer, buffer_size);
-    }
-    else if(read_buffer) {
-      configure_read_channel(read_buffer, buffer_size);
-      configure_write_channel(read_buffer, buffer_size);
-    }
   }
 
   void configure_read_channel(const void* buffer, uint16_t buffer_size)
@@ -162,6 +162,7 @@ class SercomAsyncSpiBase : public tiny::IAsyncSpi {
       DMAC_CHCTRLB_LVL_LVL0_Val);
   }
 
+ private:
   Dma::Channel write_channel{};
   Dma::Channel read_channel{};
 
