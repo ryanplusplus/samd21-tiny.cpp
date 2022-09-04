@@ -13,7 +13,13 @@ extern "C" {
 #include "Clock.hpp"
 #include "tiny/hal/ISpi.hpp"
 
-template <uint32_t pm_mask, uint8_t gclk_id, Sercom* sercom(), void configure_pins(), uint32_t dopo, uint32_t dipo>
+template <
+  uint32_t pm_mask,
+  uint8_t gclk_id,
+  Sercom* sercom(),
+  void configure_pins(),
+  uint32_t dopo,
+  uint32_t dipo>
 class SercomSpiBase : public tiny::ISpi {
  public:
   void init(

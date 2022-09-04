@@ -16,7 +16,15 @@ extern "C" {
 #include "tiny/hal/IBufferedUart.hpp"
 #include "tiny/SingleSubscriberEvent.hpp"
 
-template <uint32_t pm_mask, uint8_t gclk_id, Sercom* sercom(), void configure_pins(), uint32_t txpo, uint32_t rxpo, uint32_t dmac_sercom_tx_id, uint32_t dmac_sercom_rx_id>
+template <
+  uint32_t pm_mask,
+  uint8_t gclk_id,
+  Sercom* sercom(),
+  void configure_pins(),
+  uint32_t txpo,
+  uint32_t rxpo,
+  uint32_t dmac_sercom_tx_id,
+  uint32_t dmac_sercom_rx_id>
 class SercomBufferedUartBase : public tiny::IBufferedUart {
  public:
   void init(uint32_t baud)

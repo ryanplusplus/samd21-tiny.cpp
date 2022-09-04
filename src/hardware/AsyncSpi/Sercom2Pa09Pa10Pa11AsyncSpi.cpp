@@ -3,171 +3,39 @@
  * @brief
  */
 
-extern "C" {
-#include "sam.h"
-}
-
+#include "SercomAsyncSpiBase.hpp"
 #include "Sercom2Pa09Pa10Pa11AsyncSpi.hpp"
-#include "Clock.hpp"
-#include "Dma.hpp"
-#include "tiny/utils.h"
 
 #ifdef SERCOM2
 
-using namespace tiny;
+static constexpr Sercom* sercom()
+{
+  Sercom* sercom = SERCOM2;
+  return sercom;
+}
 
-static class : public IAsyncSpi {
- public:
-  void init(
-    uint8_t cpol,
-    uint8_t cpha,
-    bool msb_first,
-    uint32_t baud)
-  {
-    initialize_peripheral(cpol, cpha, msb_first, baud);
-    configure_dma();
-  }
+static void configure_pins()
+{
+  PORT->Group[0].PMUX[9 >> 1].bit.PMUXO = MUX_PA09D_SERCOM2_PAD1;
+  PORT->Group[0].PINCFG[9].bit.PMUXEN = 1;
 
-  void initialize_peripheral(
-    uint8_t cpol,
-    uint8_t cpha,
-    bool msb_first,
-    uint32_t baud)
-  {
-    // Enable SERCOM2 clock
-    PM->APBCMASK.bit.SERCOM2_ = 1;
+  PORT->Group[0].PMUX[10 >> 1].bit.PMUXE = MUX_PA10D_SERCOM2_PAD2;
+  PORT->Group[0].PINCFG[10].bit.PMUXEN = 1;
 
-    // Select GCLK0 (DFLL48)
-    GCLK->CLKCTRL.reg =
-      GCLK_CLKCTRL_CLKEN |
-      GCLK_CLKCTRL_GEN_GCLK0 |
-      GCLK_CLKCTRL_ID(SERCOM2_GCLK_ID_CORE);
-    while(GCLK->STATUS.bit.SYNCBUSY) {
-    }
+  PORT->Group[0].PMUX[11 >> 1].bit.PMUXO = MUX_PA11D_SERCOM2_PAD3;
+  PORT->Group[0].PINCFG[11].bit.PMUXEN = 1;
+}
 
-    PORT->Group[0].PMUX[9 >> 1].bit.PMUXO = MUX_PA09D_SERCOM2_PAD1;
-    PORT->Group[0].PINCFG[9].bit.PMUXEN = 1;
-
-    PORT->Group[0].PMUX[10 >> 1].bit.PMUXE = MUX_PA10D_SERCOM2_PAD2;
-    PORT->Group[0].PINCFG[10].bit.PMUXEN = 1;
-
-    PORT->Group[0].PMUX[11 >> 1].bit.PMUXO = MUX_PA11D_SERCOM2_PAD3;
-    PORT->Group[0].PINCFG[11].bit.PMUXEN = 1;
-
-    SERCOM2->SPI.CTRLA.reg =
-      SERCOM_SPI_CTRLA_MODE_SPI_MASTER |
-      SERCOM_SPI_CTRLA_DOPO(1) | // SERCOM2_PAD2, 3 used for MOSI, SCK
-      SERCOM_SPI_CTRLA_DIPO(1) | // SERCOM2_PAD1 used for MISO
-      (cpha << SERCOM_SPI_CTRLA_CPHA_Pos) |
-      (cpol << SERCOM_SPI_CTRLA_CPOL_Pos) |
-      (msb_first ? 0 : SERCOM_SPI_CTRLA_DORD);
-
-    SERCOM2->SPI.CTRLB.reg = SERCOM_SPI_CTRLB_RXEN;
-    while(SERCOM2->SPI.SYNCBUSY.bit.CTRLB) {
-    }
-
-    SERCOM2->SPI.BAUD.reg = (Clock::gclk0_frequency - 2 * baud) / (2 * baud);
-
-    SERCOM2->SPI.CTRLA.bit.ENABLE = 1;
-    while(SERCOM2->SPI.SYNCBUSY.bit.ENABLE) {
-    }
-  }
-
-  void configure_dma()
-  {
-    write_channel = Dma::claim();
-    read_channel = Dma::claim();
-
-    Dma::install_interrupt_handler(
-      read_channel, this, +[](decltype(this) _this) {
-        _this->callback(_this->context);
-      });
-    Dma::enable_interrupt(read_channel);
-  }
-
-  void transfer(
-    const uint8_t* write_buffer,
-    uint8_t* read_buffer,
-    uint16_t buffer_size,
-    void* _context,
-    Callback _callback) override
-  {
-    context = _context;
-    callback = _callback;
-
-    if(write_buffer && read_buffer) {
-      configure_read_channel(read_buffer, buffer_size);
-      configure_write_channel(write_buffer, buffer_size);
-    }
-    else if(write_buffer) {
-      configure_read_channel(&dummy_read_buffer, 1);
-      configure_write_channel(write_buffer, buffer_size);
-    }
-    else if(read_buffer) {
-      configure_read_channel(read_buffer, buffer_size);
-      configure_write_channel(read_buffer, buffer_size);
-    }
-  }
-
-  void configure_read_channel(const void* buffer, uint16_t buffer_size)
-  {
-    auto& d = Dma::descriptor(read_channel);
-    d.BTCTRL.bit.STEPSIZE = DMAC_BTCTRL_STEPSIZE_X1_Val;
-    d.BTCTRL.bit.STEPSEL = DMAC_BTCTRL_STEPSEL_DST_Val;
-    d.BTCTRL.bit.SRCINC = 0;
-    d.BTCTRL.bit.BEATSIZE = DMAC_BTCTRL_BEATSIZE_BYTE_Val;
-    d.BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
-    d.BTCTRL.bit.VALID = 1;
-    d.BTCNT.bit.BTCNT = buffer_size;
-    d.SRCADDR.bit.SRCADDR = reinterpret_cast<uintptr_t>(&SERCOM2->SPI.DATA.reg);
-    d.DESCADDR.bit.DESCADDR = 0;
-
-    if(buffer_size > 1) {
-      d.BTCTRL.bit.DSTINC = 1;
-      d.DSTADDR.bit.DSTADDR = reinterpret_cast<uintptr_t>(buffer) + buffer_size;
-    }
-    else {
-      d.BTCTRL.bit.DSTINC = 0;
-      d.DSTADDR.bit.DSTADDR = reinterpret_cast<uintptr_t>(buffer);
-    }
-
-    Dma::enable(
-      read_channel,
-      DMAC_CHCTRLB_TRIGACT_BEAT_Val,
-      SERCOM2_DMAC_ID_RX,
-      DMAC_CHCTRLB_LVL_LVL1_Val);
-  }
-
-  void configure_write_channel(const void* buffer, uint16_t buffer_size)
-  {
-    auto& d = Dma::descriptor(write_channel);
-    d.BTCTRL.bit.STEPSIZE = DMAC_BTCTRL_STEPSIZE_X1_Val;
-    d.BTCTRL.bit.STEPSEL = DMAC_BTCTRL_STEPSEL_SRC_Val;
-    d.BTCTRL.bit.DSTINC = 0;
-    d.BTCTRL.bit.SRCINC = 1;
-    d.BTCTRL.bit.BEATSIZE = DMAC_BTCTRL_BEATSIZE_BYTE_Val;
-    d.BTCTRL.bit.BLOCKACT = DMAC_BTCTRL_BLOCKACT_NOACT_Val;
-    d.BTCTRL.bit.VALID = 1;
-    d.BTCNT.bit.BTCNT = buffer_size;
-    d.SRCADDR.bit.SRCADDR = reinterpret_cast<uintptr_t>(buffer) + buffer_size;
-    d.DSTADDR.bit.DSTADDR = reinterpret_cast<uintptr_t>(&SERCOM2->SPI.DATA.reg);
-    d.DESCADDR.bit.DESCADDR = 0;
-
-    Dma::enable(
-      write_channel,
-      DMAC_CHCTRLB_TRIGACT_BEAT_Val,
-      SERCOM2_DMAC_ID_TX,
-      DMAC_CHCTRLB_LVL_LVL0_Val);
-  }
-
-  Dma::Channel write_channel{};
-  Dma::Channel read_channel{};
-
-  uint8_t dummy_read_buffer{};
-
-  void* context{};
-  IAsyncSpi::Callback callback{};
-} instance;
+static SercomAsyncSpiBase<
+  PM_APBCMASK_SERCOM2,
+  SERCOM2_GCLK_ID_CORE,
+  sercom,
+  configure_pins,
+  SERCOM_SPI_CTRLA_DOPO(1), // SERCOM2_PAD2, 3 used for MOSI, SCK
+  SERCOM_SPI_CTRLA_DIPO(1), // SERCOM2_PAD1 used for MISO
+  SERCOM2_DMAC_ID_TX,
+  SERCOM2_DMAC_ID_RX>
+  instance;
 
 tiny::IAsyncSpi& Sercom2Pa09Pa10Pa11AsyncSpi::get_instance(
   bool cpol,
