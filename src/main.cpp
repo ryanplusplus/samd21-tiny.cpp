@@ -5,6 +5,7 @@
 
 #include "Board.hpp"
 #include "tiny/Timer.hpp"
+#include "tiny/Rtt.hpp"
 
 using namespace tiny;
 
@@ -18,6 +19,9 @@ int main()
   Heartbeat heartbeat{timer_group};
 
   Interrupts::enable();
+
+  Rtt::init();
+  Rtt::printf("Hello, RTT!");
 
   while(1) {
     if(timer_group.run()) {

@@ -10,3 +10,6 @@
 [submodule "lib/tiny.cpp"]
 	path = lib/tiny.cpp
 	url = https://github.com/ryanplusplus/tiny.cpp
+[submodule "lib/tiny-rtt"]
+	path = lib/tiny-rtt
+	url = https://github.com/ryanplusplus/tiny-rtt
