@@ -23,7 +23,7 @@ static void configure_pins()
   PORT->Group[0].PINCFG[11].bit.PMUXEN = 1;
 }
 
-SercomUartBase<
+static SercomUartBase<
   PM_APBCMASK_SERCOM0,
   SERCOM0_GCLK_ID_CORE,
   sercom,
