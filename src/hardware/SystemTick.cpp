@@ -30,7 +30,7 @@ static class : public ITimeSource {
     NVIC_SetPriority(SysTick_IRQn, 7);
   }
 
-  TickCount ticks() override
+  TickCount ticks() const override
   {
     TickCount previous;
     TickCount current = current_ticks;
