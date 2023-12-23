@@ -9,6 +9,7 @@
 #include "Clock.hpp"
 #include "HeartbeatTemplate.hpp"
 #include "Interrupts.hpp"
+#include "Neopixel.hpp"
 #include "Sercom0Pa05Pa06Pa07AsyncSpi.hpp"
 #include "Sercom0Pa05Pa06Pa07Spi.hpp"
 #include "Sercom2Pa08Pa09I2c.hpp"
@@ -23,5 +24,6 @@ using AsyncSpi = Sercom0Pa05Pa06Pa07AsyncSpi;
 using Spi = Sercom0Pa05Pa06Pa07Spi;
 using BufferedUart = Sercom4Pb08Pb09BufferedUart;
 using Uart = Sercom4Pb08Pb09Uart;
+using NeopixelBff = Neopixel::Neopixel<Neopixel::ByteOrder::grb, Clock::gclk0_frequency, PIN_PA11>;
 
 #endif

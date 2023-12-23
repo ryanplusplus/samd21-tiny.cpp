@@ -2,10 +2,13 @@ include tools/setup.mk
 
 TARGET := target
 BUILD_DIR := ./build
-BOARD ?= metro_m0
+BOARD ?= qt_py
 
 include board/$(BOARD).mk
 include tools/defaults.mk
+
+CXXFLAGS += \
+  -std=c++20 \
 
 INC_DIRS += \
 

@@ -7,6 +7,7 @@
 #define Neopixel_hpp
 
 #include <cstdint>
+#include <span>
 #include "Interrupts.hpp"
 #include "sam.h"
 
@@ -57,23 +58,23 @@ namespace Neopixel {
     }
 
    public:
-    void write(const Color* data, uint16_t count)
+    void write(const std::span<Color>& data)
     {
       Interrupts::critical_section([&]() {
-        for(uint16_t i = 0; i < count; i++) {
-          for(uint8_t j = 0; j < sizeof(data[0]); j++) {
-            send_byte(((const uint8_t*)data)[i * sizeof(data[0]) + j]);
+        for(auto& element : data) {
+          for(uint8_t j = 0; j < sizeof(element); j++) {
+            send_byte(((const uint8_t*)&element)[j]);
           }
         }
       });
     }
 
-    void write_all(const Color* data, uint16_t count)
+    void write_all(const Color& data, uint16_t count)
     {
       Interrupts::critical_section([&]() {
         for(uint16_t i = 0; i < count; i++) {
-          for(uint8_t j = 0; j < sizeof(data[0]); j++) {
-            send_byte(((const uint8_t*)data)[j]);
+          for(uint8_t j = 0; j < sizeof(data); j++) {
+            send_byte(((const uint8_t*)&data)[j]);
           }
         }
       });
