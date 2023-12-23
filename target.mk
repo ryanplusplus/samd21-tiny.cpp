@@ -2,7 +2,7 @@ include tools/setup.mk
 
 TARGET := target
 BUILD_DIR := ./build
-BOARD ?= qt_py
+BOARD ?= xiao
 
 include board/$(BOARD).mk
 include tools/defaults.mk
