@@ -3,8 +3,8 @@
  * @brief
  */
 
-#include "SercomAsyncSpiBase.hpp"
 #include "Sercom0Pa05Pa06Pa07AsyncSpi.hpp"
+#include "SercomAsyncSpiBase.hpp"
 
 #ifdef SERCOM0
 

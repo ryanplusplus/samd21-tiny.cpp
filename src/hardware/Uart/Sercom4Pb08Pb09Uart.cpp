@@ -3,8 +3,8 @@
  * @brief
  */
 
-#include "SercomUartBase.hpp"
 #include "Sercom4Pb08Pb09Uart.hpp"
+#include "SercomUartBase.hpp"
 
 #ifdef SERCOM4
 

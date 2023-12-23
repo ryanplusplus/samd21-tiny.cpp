@@ -3,8 +3,8 @@
  * @brief
  */
 
-#include "SercomI2cBase.hpp"
 #include "Sercom3Pa22Pa23I2c.hpp"
+#include "SercomI2cBase.hpp"
 
 #ifdef SERCOM3
 

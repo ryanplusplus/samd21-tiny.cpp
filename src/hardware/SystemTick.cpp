@@ -16,7 +16,7 @@ static volatile ITimeSource::TickCount current_ticks;
 
 extern "C" void SysTick_Handler()
 {
-  current_ticks++;
+  current_ticks = current_ticks + 1;
 }
 
 static class : public ITimeSource {

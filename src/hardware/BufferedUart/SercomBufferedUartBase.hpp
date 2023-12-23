@@ -13,8 +13,8 @@ extern "C" {
 #include <cstring>
 #include "Clock.hpp"
 #include "Dma.hpp"
-#include "tiny/hal/IBufferedUart.hpp"
 #include "tiny/SingleSubscriberEvent.hpp"
+#include "tiny/hal/IBufferedUart.hpp"
 
 template <
   uint32_t pm_mask,

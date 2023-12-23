@@ -7,15 +7,15 @@
 #define Board_hpp
 
 #include "Clock.hpp"
-#include "SystemTick.hpp"
-#include "Watchdog.hpp"
-#include "Interrupts.hpp"
 #include "HeartbeatTemplate.hpp"
+#include "Interrupts.hpp"
+#include "Sercom0Pa10Pa11BufferedUart.hpp"
+#include "Sercom0Pa10Pa11Uart.hpp"
 #include "Sercom3Pa22Pa23I2c.hpp"
 #include "Sercom4Pa12Pb10Pb11AsyncSpi.hpp"
 #include "Sercom4Pa12Pb10Pb11Spi.hpp"
-#include "Sercom0Pa10Pa11BufferedUart.hpp"
-#include "Sercom0Pa10Pa11Uart.hpp"
+#include "SystemTick.hpp"
+#include "Watchdog.hpp"
 
 using Heartbeat = HeartbeatTemplate<PIN_PA17>;
 using I2c = Sercom3Pa22Pa23I2c;

@@ -11,8 +11,8 @@ extern "C" {
 }
 
 #include "Clock.hpp"
-#include "tiny/hal/IUart.hpp"
 #include "tiny/SingleSubscriberEvent.hpp"
+#include "tiny/hal/IUart.hpp"
 
 template <uint32_t pm_mask, uint8_t gclk_id, Sercom* sercom(), void configure_pins(), uint32_t txpo, uint32_t rxpo, IRQn_Type irq>
 class SercomUartBase : public tiny::IUart {

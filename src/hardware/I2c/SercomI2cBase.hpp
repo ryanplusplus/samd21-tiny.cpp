@@ -167,7 +167,8 @@ class SercomI2cBase : public tiny::II2c {
   static inline bool wait_for_mb()
   {
     volatile uint32_t timeout = 100000;
-    while(!sercom()->I2CM.INTFLAG.bit.MB && !sercom()->I2CM.INTFLAG.bit.ERROR && --timeout) {
+    while(!sercom()->I2CM.INTFLAG.bit.MB && !sercom()->I2CM.INTFLAG.bit.ERROR && timeout) {
+      timeout = timeout - 1;
     }
 
     return !sercom()->I2CM.INTFLAG.bit.ERROR && sercom()->I2CM.INTFLAG.bit.MB;

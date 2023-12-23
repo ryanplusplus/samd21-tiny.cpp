@@ -8,8 +8,8 @@ extern "C" {
 }
 
 #include <cstdbool>
-#include "Interrupts.hpp"
 #include "Dma.hpp"
+#include "Interrupts.hpp"
 
 enum {
   channel_count = 12
@@ -129,7 +129,7 @@ void Dma::disable_interrupt(Channel channel)
 
 void Dma::_install_interrupt_handler(Channel channel, void* context, void (*callback)(void*))
 {
-  handler[static_cast<uint8_t>(channel)] = InterruptHandler{callback, context};
+  handler[static_cast<uint8_t>(channel)] = InterruptHandler{ callback, context };
 }
 
 extern "C" void DMAC_Handler()

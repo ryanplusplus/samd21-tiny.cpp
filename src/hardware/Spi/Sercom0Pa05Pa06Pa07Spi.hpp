@@ -6,8 +6,8 @@
 #ifndef Sercom0Pa05Pa06Pa07Spi_hpp
 #define Sercom0Pa05Pa06Pa07Spi_hpp
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include "tiny/hal/ISpi.hpp"
 
 class Sercom0Pa05Pa06Pa07Spi {
